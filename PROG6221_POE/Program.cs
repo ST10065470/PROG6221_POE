@@ -3,8 +3,16 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
-        Console.WriteLine("This is a test");
+        
+    }
+
+    public void Menu()
+    {
+        Console.WriteLine("RECIPE BOOK PROGRAMME" +
+                          "\n---------------------");
+        Console.WriteLine("1) Enter New Recipe" +
+                          "2) Display Recipe" +
+                          "3) Delete Recipe");
     }
 }
 
