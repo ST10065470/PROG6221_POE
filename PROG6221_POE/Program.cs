@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace PROG6221_POE;
+﻿namespace PROG6221_POE;
 class Program
 {
     private List<Recipe> recipeList = new List<Recipe>();
@@ -20,6 +18,8 @@ class Program
     public void Menu()
     {
         int menuSelection = 0;
+
+        printTitle();
 
         Console.WriteLine("1) Enter New Recipe" +
                           "\n2) Display Recipe" +
@@ -51,13 +51,15 @@ class Program
             case 3:
                 Console.Clear();
                 printTitle();
+                recipeList.Clear();
+                Console.WriteLine("All Recipes Have Been Deleted");
                 break;
             case 4:
                 Console.Clear();
                 Environment.Exit(0);
                 break;
         }
-
+        Menu();
     }
 
     public void incorrectEntryPrompt()
@@ -70,6 +72,10 @@ class Program
 
     public void createRecipe()
     {
+        int numIngredients = 0;
+        Boolean conditionPass = false;
+        Boolean? isThereAnIngrediantToAdd;
+
         if (recipeList.Count > 0)
         {
             Console.WriteLine("A Recipe Is Already Present In Storage. " +
@@ -86,9 +92,50 @@ class Program
                 return;
             }
         }
-        Console.Write("Please Enter The Name Of The New Recipe");
+        Console.Write("Please Enter The Name Of The New Recipe: ");
         Recipe newRecipe = new Recipe(Console.ReadLine());
+
+        do
+        {
+            Console.Write("\nDo You Have An Ingrediant To Add (Y/N): ");
+
+            if (Console.ReadLine().ToLower().Equals("y"))
+            {
+                Console.Clear();
+                printTitle();
+
+                string ingerdiantName;
+                double ingrediantQuantity;
+                string ingrediantUnitOfMeasurement;
+
+                Console.Write("\nPlease Enter The Name Of The Ingrediant: ");
+                ingerdiantName = Console.ReadLine();
+
+                Console.Write("\nPlease Enter The Unit Of Measurement For \""
+                              + ingerdiantName + "\": ");
+                ingrediantUnitOfMeasurement = Console.ReadLine();
+
+                Console.Write("\nPlease Enter The Quantity For\""
+                              + ingerdiantName + "\": ");
+
+                newRecipe.addIngredient();
+            }
+            isThereAnIngrediantToAdd = true;
+        } while (isThereAnIngrediantToAdd == true);
     }
-    
+
+    public void displayRecipe()
+    {
+        int recipeNum = 1;
+        Console.WriteLine("Please Select The Recipe You Want To Display");
+
+
+        foreach (Recipe recipe in recipeList)
+        {
+            Console.WriteLine(recipeNum + ") " + recipe.RecipeName);
+            recipeNum++;
+        }
+    }
+
 }
 

@@ -5,11 +5,15 @@ namespace PROG6221_POE
 	{
         private List<Ingredient> ingredientsList;
         private List<string> stepsList;
+        private string recipeName;
 
-        public Recipe()
+        public string RecipeName { get => recipeName; set => recipeName = value; }
+
+        public Recipe(string recipeName)
         {
             ingredientsList = new List<Ingredient>();
             stepsList = new List<string>();
+            this.RecipeName = recipeName;
         }
 
         public void addIngredient(string ingredientName, string unitOfMeasurement,
