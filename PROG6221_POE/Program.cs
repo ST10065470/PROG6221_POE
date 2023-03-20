@@ -11,12 +11,16 @@ class Program
         run.Menu();
     }
 
+    public void printTitle()
+    {
+        Console.WriteLine("RECIPE BOOK PROGRAMME" +
+                  "\n---------------------");
+    }
+
     public void Menu()
     {
         int menuSelection = 0;
 
-        Console.WriteLine("RECIPE BOOK PROGRAMME" +
-                          "\n---------------------");
         Console.WriteLine("1) Enter New Recipe" +
                           "\n2) Display Recipe" +
                           "\n3) Delete Recipe" +
@@ -30,16 +34,23 @@ class Program
         catch
         {
             incorrectEntryPrompt();
+            Menu();
         }
 
         switch (menuSelection)
         {
             case 1:
+                Console.Clear();
+                printTitle();
                 createRecipe();
                 break;
             case 2:
+                Console.Clear();
+                printTitle();
                 break;
             case 3:
+                Console.Clear();
+                printTitle();
                 break;
             case 4:
                 Console.Clear();
@@ -55,12 +66,28 @@ class Program
         Console.WriteLine("Press Enter To Continue");
         Console.ReadLine();
         Console.Clear();
-        Menu();
     }
 
     public void createRecipe()
     {
-        Recipe newRecipe = new Recipe();
+        if (recipeList.Count > 0)
+        {
+            Console.WriteLine("A Recipe Is Already Present In Storage. " +
+                              "To Add A New Recipe, Storage Must Be Cleared");
+            Console.Write("Would You Like To Continue (Y/N): ");
+
+
+            if (Console.ReadLine().ToLower().Equals("y"))
+            {
+                recipeList.Clear();
+            }
+            else
+            {
+                return;
+            }
+        }
+        Console.Write("Please Enter The Name Of The New Recipe");
+        Recipe newRecipe = new Recipe(Console.ReadLine());
     }
     
 }
