@@ -3,7 +3,8 @@ class Program
 {
     static void Main(string[] args)
     {
-        
+        Program run = new Program();
+        run.Menu();
     }
 
     public void Menu()
@@ -11,8 +12,8 @@ class Program
         Console.WriteLine("RECIPE BOOK PROGRAMME" +
                           "\n---------------------");
         Console.WriteLine("1) Enter New Recipe" +
-                          "2) Display Recipe" +
-                          "3) Delete Recipe");
+                          "\n2) Display Recipe" +
+                          "\n3) Delete Recipe");
     }
 }
 
