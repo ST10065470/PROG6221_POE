@@ -87,6 +87,13 @@ class Program
         Boolean confirmInputCorrect = false;
         string userInput;
 
+        if (recipeList.Count() == 0)
+        {
+            Console.Write("No Recipes Saved");
+            loadingAnimation();
+            return;
+        }
+
         do
         {
             Console.Write("Are You Sure You Want To Delete The Saved Recipe (Y/N): ");
@@ -95,7 +102,7 @@ class Program
             if (userInput.Equals("y"))
         {
             recipeList.Clear();
-            Console.WriteLine("\nRecipe Deleted");
+            Console.Write("\n\nRecipe Deleted");
                 loadingAnimation();
             confirmInputCorrect = true;
         }
@@ -116,8 +123,10 @@ class Program
     public void CreateRecipe()
     {
         Boolean isThereAnIngrediantToAdd = true;
+        Boolean isThereAStepToAdd = true;
         string userInput;
         Boolean confirmInputCorrect = false;
+        int stepCount = 1;
 
         if (recipeList.Count() > 0)
         {
@@ -156,7 +165,6 @@ class Program
         do
         {
             PrintTitle();
-
             Console.WriteLine("Recipe: " + newRecipe.RecipeName);
             Console.WriteLine();
             Console.Write("Do You Have An Ingrediant To Add (Y/N): ");
@@ -216,10 +224,46 @@ class Program
             }
         } while (isThereAnIngrediantToAdd == true);
 
+        do
+        {
+            PrintTitle();
+            Console.WriteLine("Recipe: " + newRecipe.RecipeName);
+            Console.Write("\nDo You Have A Step To Add (Y/N): ");
+            userInput = Console.ReadLine().ToLower();
+
+            if (userInput.Equals("y"))
+            {
+                string step;
+
+                PrintTitle();
+                Console.WriteLine("Recipe: " + newRecipe.RecipeName);
+                Console.WriteLine();
+                Console.Write("Please Enter Step Number " + stepCount + ": ");
+                step = Console.ReadLine();
+                newRecipe.addStep(step);
+                stepCount++;
+            }
+            else if (userInput.Equals("n"))
+            {
+                if (newRecipe.StepsList.Count() == 0)
+                {
+                    Console.Write("\nNo Steps Added! New Recipe Did Not Save");
+                    recipeList.Clear();
+                    loadingAnimation();
+                    return;
+                }
+                isThereAStepToAdd = false;
+            }
+            else
+            {
+                IncorrectEntryPrompt();
+            }
+
+        } while (isThereAStepToAdd == true);
+
         recipeList.Add(newRecipe);
         PrintTitle();
         Console.Write("Recipe Saved");
-
         loadingAnimation();
     }
 

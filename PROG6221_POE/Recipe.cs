@@ -10,13 +10,14 @@ namespace PROG6221_POE
 
         public string RecipeName { get => recipeName; set => recipeName = value; }
         public List<Ingredient> IngredientsList { get => ingredientsList; set => ingredientsList = value; }
+        public List<string> StepsList { get => stepsList; set => stepsList = value; }
 
-//----------------------------------------------------------------------------\\
+        //----------------------------------------------------------------------------\\
 
         public Recipe(string recipeName)
         {
             IngredientsList = new List<Ingredient>();
-            stepsList = new List<string>();
+            StepsList = new List<string>();
             this.RecipeName = recipeName;
         }
 
@@ -34,7 +35,7 @@ namespace PROG6221_POE
 
         public void addStep(string step)
         {
-            stepsList.Add(step);
+            StepsList.Add(step);
         }
 
 //----------------------------------------------------------------------------\\
@@ -42,6 +43,9 @@ namespace PROG6221_POE
         public string displayRecipe(double scale)
         {
             string ingredientsToString = "Ingredients:";
+            string stepsToString = "Steps:";
+            string recipe;
+            int stepCount = 1;
 
             foreach (Ingredient ingredient in IngredientsList)
             {
@@ -49,7 +53,15 @@ namespace PROG6221_POE
                     + " " + ingredient.Name + " "
                     + ingredient.UnitOfMeasurement;
             }
-            return ingredientsToString;
+
+            foreach (string step in StepsList)
+            {
+                stepsToString += "\n" + stepCount + ". " + stepsList[stepCount - 1];
+                stepCount++;
+            }
+
+            recipe = RecipeName + ":\n\n" + ingredientsToString + "\n\n" + stepsToString;
+            return recipe;
         }
 
 //----------------------------------------------------------------------------\\
