@@ -41,12 +41,12 @@ namespace PROG6221_POE
 
         public string displayRecipe(double scale)
         {
-            string ingredientsToString = "";
+            string ingredientsToString = "Ingredients:";
 
             foreach (Ingredient ingredient in IngredientsList)
             {
-                ingredientsToString += ingredient.Name + ":\t"
-                    + double.Round((ingredient.Quantity * scale), 2) + "\t"
+                ingredientsToString += "\n" + double.Round((ingredient.Quantity * scale), 2)
+                    + " " + ingredient.Name + " "
                     + ingredient.UnitOfMeasurement;
             }
             return ingredientsToString;

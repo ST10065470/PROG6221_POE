@@ -23,11 +23,11 @@ namespace PROG6221_POE
         public double Quantity { get => quantity; set => quantity = value; }
 
 //----------------------------------------------------------------------------\\
-        public void displayInfo()
-        {
-            Console.WriteLine("Name:\t" + name);
-            Console.WriteLine("Quantity:");
-        }
+        //public void displayInfo()
+        //{
+        //    Console.WriteLine("Name:\t" + name);
+        //    Console.WriteLine("Quantity:");
+        //}
 //----------------------------------------------------------------------------\\
     }
 }

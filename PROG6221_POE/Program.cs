@@ -1,4 +1,6 @@
-﻿namespace PROG6221_POE;
+﻿using static System.Formats.Asn1.AsnWriter;
+
+namespace PROG6221_POE;
 class Program
 {
     private List<Recipe> recipeList = new List<Recipe>();
@@ -13,6 +15,7 @@ class Program
 
     public void PrintTitle()
     {
+        Console.Clear();
         Console.WriteLine("RECIPE BOOK PROGRAMME" +
                           "\n---------------------");
     }
@@ -42,13 +45,11 @@ class Program
         switch (menuSelection)
         {
             case 1:
-                Console.Clear();
                 PrintTitle();
                 CreateRecipe();
                 break;
             case 2:
-                Console.Clear();
-                PrintTitle();
+                DisplayRecipe();
                 break;
             case 3:
                 DeleteRecipe();
@@ -71,16 +72,16 @@ class Program
     public void IncorrectEntryPrompt()
     {
         ClearCurrentConsoleLine();
-        Console.Write("Invalid Entry! Press Try Again.");
-        Thread.Sleep(1000);
-        Console.SetCursorPosition(0, Console.CursorTop);
+        Console.Write("Invalid Entry! Press Try Again");
+        loadingAnimation();
+        ClearCurrentConsoleLine();
+        Console.SetCursorPosition(0, Console.CursorTop + 1);
     }
 
 //----------------------------------------------------------------------------\\
 
     public void DeleteRecipe()
     {
-        Console.Clear();
         PrintTitle();
 
         Boolean confirmInputCorrect = false;
@@ -94,8 +95,8 @@ class Program
             if (userInput.Equals("y"))
         {
             recipeList.Clear();
-            Console.WriteLine("\nRecipe Deleted!");
-            Thread.Sleep(1000);
+            Console.WriteLine("\nRecipe Deleted");
+                loadingAnimation();
             confirmInputCorrect = true;
         }
         else if (userInput.Equals("n"))
@@ -120,24 +121,25 @@ class Program
 
         if (recipeList.Count() > 0)
         {
+            Console.WriteLine("A Recipe Is Already Present In Storage. " +
+                              "To Add A New Recipe, Storage Must Be Cleared");
+            Console.WriteLine();
             do
             {
-                Console.WriteLine("A Recipe Is Already Present In Storage. " +
-                  "To Add A New Recipe, Storage Must Be Cleared");
                 Console.Write("Would You Like To Continue (Y/N): ");
                 userInput = Console.ReadLine().ToLower();
 
                 if (userInput.Equals("y"))
                 {
                     recipeList.Clear();
-                    Console.WriteLine("\nRecipe Deleted!");
-                    Thread.Sleep(1000);
+                    Console.Write("\nRecipe Deleted");
+                    loadingAnimation();
                     confirmInputCorrect = true;
+                    PrintTitle();
                 }
                 else if (userInput.Equals("n"))
                 {
-                    Console.Clear();
-                    confirmInputCorrect = true;
+                    return;
                 }
                 else
                 {
@@ -150,10 +152,13 @@ class Program
 
         Console.Write("Please Enter The Name Of The New Recipe: ");
         Recipe newRecipe = new Recipe(Console.ReadLine());
-        Console.WriteLine();
 
         do
         {
+            PrintTitle();
+
+            Console.WriteLine("Recipe: " + newRecipe.RecipeName);
+            Console.WriteLine();
             Console.Write("Do You Have An Ingrediant To Add (Y/N): ");
             userInput = Console.ReadLine().ToLower();
 
@@ -173,7 +178,7 @@ class Program
 
                 do
                 {
-                    Console.Write("Please Enter The Quantity For\""
+                    Console.Write("Please Enter The Quantity For \""
                                   + ingerdiantName + "\" (x.xx): ");
                     confirmInputCorrect = double.TryParse(Console.ReadLine(),
                                                     out ingrediantQuantity);
@@ -190,17 +195,16 @@ class Program
 
                 newRecipe.addIngredient(ingerdiantName, ingrediantUnitOfMeasurement,
                                         ingrediantQuantity);
-                Console.Clear();
-                PrintTitle();
             }
 
             else if (userInput.Equals("n"))
             {
                 if (newRecipe.IngredientsList.Count == 0)
                 {
-                    Console.WriteLine("\nNo Ingredients Added! New Recipe Did Not Save.");
+                    Console.Write("\nNo Ingredients Added! New Recipe Did Not Save");
                     recipeList.Clear();
-                    Thread.Sleep(1500);
+                    loadingAnimation();
+                    return;
                 }
                 Console.Clear();
                 isThereAnIngrediantToAdd = false;
@@ -211,21 +215,106 @@ class Program
                 IncorrectEntryPrompt();
             }
         } while (isThereAnIngrediantToAdd == true);
+
+        recipeList.Add(newRecipe);
+        PrintTitle();
+        Console.Write("Recipe Saved");
+
+        loadingAnimation();
     }
 
 //----------------------------------------------------------------------------\\
 
     public void DisplayRecipe()
     {
-        int recipeNum = 1;
-        Console.WriteLine("Please Select The Recipe You Want To Display");
+        PrintTitle();
 
+        int recipeNum = 1;
+        int recipeIndex = 0;
+        double recipeScale = 0;
+        Boolean confirmInputCorrect = false;
+        string userInput;
+
+        if (recipeList.Count == 0)
+        {
+            Console.Write("No Recipes Saved");
+            loadingAnimation();
+            return;
+        }
+
+        Console.WriteLine("Please Select The Recipe You Want To Display:");
 
         foreach (Recipe recipe in recipeList)
         {
             Console.WriteLine(recipeNum + ") " + recipe.RecipeName);
             recipeNum++;
         }
+
+        do
+        {
+            Console.Write("\nEnter Your Numeric Selection: ");
+
+            try
+            {
+                recipeIndex = int.Parse(Console.ReadLine()) - 1;
+                confirmInputCorrect = true;
+            }
+            catch
+            {
+                IncorrectEntryPrompt();
+            }
+
+        } while (confirmInputCorrect == false);
+
+        PrintTitle();
+        Console.WriteLine("Recipe: " + recipeList[recipeIndex].RecipeName + "\n");
+        Console.Write("Select Your Scale:" +
+                          "\n1) Default (1x)" +
+                          "\n2) Double (2x)" +
+                          "\n3) Triple (3x)" +
+                          "\n4) Half (0.5)");
+        //Console.Write("\nEnter Your Selection Of Scale: ");
+        Console.WriteLine();
+        recipeScale = setScale();
+
+        PrintTitle();
+        Console.WriteLine("Recipe: " + recipeList[recipeIndex].RecipeName + "\n");
+        Console.WriteLine(recipeList[recipeIndex].displayRecipe(recipeScale));
+
+        confirmInputCorrect = false;
+
+        do
+        {
+            Console.WriteLine("\nWould You Like To:" +
+                              "\n1) Reset Scale" +
+                              "\n2) Return To Menu");
+            userInput = (Console.ReadLine()).ToLower();
+            PrintTitle();
+
+            if ("1) reset scale".Contains(userInput))
+            {
+                PrintTitle();
+                Console.WriteLine("Recipe: " + recipeList[recipeIndex].RecipeName + "\n");
+                Console.Write("Select Your Scale:" +
+                                  "\n1) Default (1x)" +
+                                  "\n2) Double (2x)" +
+                                  "\n3) Triple (3x)" +
+                                  "\n4) Half (0.5)");
+                recipeScale = setScale();
+
+                PrintTitle();
+                Console.WriteLine("Recipe: " + recipeList[recipeIndex].RecipeName + "\n");
+                Console.WriteLine(recipeList[recipeIndex].displayRecipe(recipeScale));
+            }
+            else if ("2) Return To Menu".Contains(userInput))
+            {
+                return;
+            }
+            else
+            {
+                IncorrectEntryPrompt();
+            }
+        } while (true);
     }
 
 //----------------------------------------------------------------------------\\
@@ -236,6 +325,64 @@ class Program
         Console.Write(new string(' ', Console.WindowWidth));
         Console.SetCursorPosition(0, Console.CursorTop - 1);
     }
+
+//----------------------------------------------------------------------------\\
+
+    public void loadingAnimation() {
+        for (int pos = 0; pos < 3; pos++)
+        {
+            Thread.Sleep(500);
+            Console.Write(".");
+        }
+        Thread.Sleep(500);
+    }
+
+//----------------------------------------------------------------------------\\
+    public double setScale()
+    {
+        string scale;
+        double recipeScale = 1;
+        Boolean confirmInputCorrect = false;
+
+        do
+        {
+            Console.Write("Enter Your Selection Of Scale: ");
+            scale = (Console.ReadLine() + "  ").ToLower().Substring(0, 2);
+
+            switch (scale)
+            {
+                case "4 ":
+                case "0.":
+                case "ha":
+                    recipeScale = 0.5;
+                    confirmInputCorrect = true;
+                    break;
+                case "1 ":
+                case "de":
+                    recipeScale = 1;
+                    confirmInputCorrect = true;
+                    break;
+                case "2 ":
+                case "do":
+                    recipeScale = 2;
+                    confirmInputCorrect = true;
+                    break;
+                case "3 ":
+                case "tr":
+                    recipeScale = 3;
+                    confirmInputCorrect = true;
+                    break;
+                default:
+                    IncorrectEntryPrompt();
+                    break;
+            }
+
+        } while (confirmInputCorrect == false);
+
+        return recipeScale;
+    }
+
 }
 
 //----------------------------------------------------------------------------\\
+
