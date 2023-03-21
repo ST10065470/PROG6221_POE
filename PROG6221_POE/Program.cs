@@ -65,11 +65,10 @@ class Program
 
     public void IncorrectEntryPrompt()
     {
-        Console.SetCursorPosition(0, Console.CursorTop - 1);
         ClearCurrentConsoleLine();
-
         Console.Write("Invalid Entry! Press Try Again.");
         Thread.Sleep(1000);
+        Console.SetCursorPosition(0, Console.CursorTop);
     }
 
     public void DeleteRecipe()
@@ -80,10 +79,12 @@ class Program
         Boolean confirmInputCorrect = false;
         string userInput;
 
-        Console.Write("Are You Sure You Want To Delete The Saved Recipe (Y/N): ");
-        userInput = Console.ReadLine().ToLower();
+        do
+        {
+            Console.Write("Are You Sure You Want To Delete The Saved Recipe (Y/N): ");
+            userInput = Console.ReadLine().ToLower();
 
-        if (userInput.Equals("y"))
+            if (userInput.Equals("y"))
         {
             recipeList.Clear();
             Console.WriteLine("\nRecipe Deleted!");
@@ -93,14 +94,13 @@ class Program
         else if (userInput.Equals("n"))
         {
             Console.Clear();
-            return;
+                confirmInputCorrect = true;
         }
         else
         {
             IncorrectEntryPrompt();
-            Console.Clear();
-            DeleteRecipe();
         }
+        } while (confirmInputCorrect == false);
     }
 
     public void CreateRecipe()
@@ -182,7 +182,9 @@ class Program
 
     public static void ClearCurrentConsoleLine()
     {
-        Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r");
+        Console.SetCursorPosition(0, Console.CursorTop - 1);
+        Console.Write(new string(' ', Console.WindowWidth));
+        Console.SetCursorPosition(0, Console.CursorTop - 1);
     }
 }
 
