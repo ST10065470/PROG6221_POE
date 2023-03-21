@@ -9,7 +9,7 @@ class Program
         run.Menu();
     }
 
-    public void printTitle()
+    public void PrintTitle()
     {
         Console.WriteLine("RECIPE BOOK PROGRAMME" +
                   "\n---------------------");
@@ -19,13 +19,13 @@ class Program
     {
         int menuSelection = 0;
 
-        printTitle();
+        PrintTitle();
 
         Console.WriteLine("1) Enter New Recipe" +
                           "\n2) Display Recipe" +
                           "\n3) Delete Recipe" +
                           "\n4) Exit");
-        Console.Write("\n\nEnter Your Numeric Selection: ");
+        Console.Write("\nEnter Your Numeric Selection: ");
 
         try
         {
@@ -33,44 +33,77 @@ class Program
         }
         catch
         {
-            incorrectEntryPrompt();
-            Menu();
+            
         }
 
         switch (menuSelection)
         {
             case 1:
                 Console.Clear();
-                printTitle();
-                createRecipe();
+                PrintTitle();
+                CreateRecipe();
                 break;
             case 2:
                 Console.Clear();
-                printTitle();
+                PrintTitle();
                 break;
             case 3:
-                Console.Clear();
-                printTitle();
-                recipeList.Clear();
-                Console.WriteLine("All Recipes Have Been Deleted");
+                DeleteRecipe();
                 break;
             case 4:
                 Console.Clear();
                 Environment.Exit(0);
                 break;
+            default:
+                IncorrectEntryPrompt();
+                Console.Clear();
+                Menu();
+                break;
         }
         Menu();
     }
 
-    public void incorrectEntryPrompt()
+    public void IncorrectEntryPrompt()
     {
-        Console.WriteLine("\nInvalid Entry! Please Try Again.");
-        Console.WriteLine("Press Enter To Continue");
-        Console.ReadLine();
-        Console.Clear();
+        Console.SetCursorPosition(0, Console.CursorTop - 1);
+        ClearCurrentConsoleLine();
+
+        Console.Write("Invalid Entry! Press Try Again.");
+        Thread.Sleep(1000);
     }
 
-    public void createRecipe()
+    public void DeleteRecipe()
+    {
+        Console.Clear();
+        PrintTitle();
+
+        Boolean confirmInputCorrect = false;
+        string userInput;
+
+        Console.Write("Are You Sure You Want To Delete The Saved Recipe (Y/N): ");
+        userInput = Console.ReadLine().ToLower();
+
+        if (userInput.Equals("y"))
+        {
+            recipeList.Clear();
+            Console.WriteLine("\nRecipe Deleted!");
+            Thread.Sleep(1000);
+            confirmInputCorrect = true;
+        }
+        else if (userInput.Equals("n"))
+        {
+            Console.Clear();
+            return;
+        }
+        else
+        {
+            IncorrectEntryPrompt();
+            Console.Clear();
+            DeleteRecipe();
+        }
+    }
+
+    public void CreateRecipe()
     {
         int numIngredients = 0;
         Boolean? conditionPass = false;
@@ -87,7 +120,7 @@ class Program
             {
                 recipeList.Clear();
             }
-            else
+            else if (Console.ReadLine().ToLower().Equals("n"))
             {
                 return;
             }
@@ -102,7 +135,7 @@ class Program
             if (Console.ReadLine().ToLower().Equals("y"))
             {
                 Console.Clear();
-                printTitle();
+                PrintTitle();
 
                 string ingerdiantName;
                 double ingrediantQuantity = 0;
@@ -124,6 +157,7 @@ class Program
                     if (conditionPass == false)
                     {
                         Console.WriteLine("Wrong");
+                        Console.Write("\b");
                     }
                 }
 
@@ -133,7 +167,7 @@ class Program
         } while (isThereAnIngrediantToAdd == true);
     }
 
-    public void displayRecipe()
+    public void DisplayRecipe()
     {
         int recipeNum = 1;
         Console.WriteLine("Please Select The Recipe You Want To Display");
@@ -146,5 +180,9 @@ class Program
         }
     }
 
+    public static void ClearCurrentConsoleLine()
+    {
+        Console.Write("\r" + new string(' ', Console.WindowWidth) + "\r");
+    }
 }
 

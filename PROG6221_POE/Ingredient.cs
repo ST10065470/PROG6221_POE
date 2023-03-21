@@ -21,7 +21,8 @@ namespace PROG6221_POE
 
         public void displayInfo()
         {
-            Console.WriteLine("");
+            Console.WriteLine("Name:\t" + name);
+            Console.WriteLine("Quantity:");
         }
     }
 }
