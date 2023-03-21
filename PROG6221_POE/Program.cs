@@ -2,18 +2,22 @@
 class Program
 {
     private List<Recipe> recipeList = new List<Recipe>();
-
+//----------------------------------------------------------------------------\\
     static void Main(string[] args)
     {
         Program run = new Program();
         run.Menu();
     }
 
+//----------------------------------------------------------------------------\\
+
     public void PrintTitle()
     {
         Console.WriteLine("RECIPE BOOK PROGRAMME" +
-                  "\n---------------------");
+                          "\n---------------------");
     }
+
+//----------------------------------------------------------------------------\\
 
     public void Menu()
     {
@@ -32,8 +36,7 @@ class Program
             menuSelection = int.Parse(Console.ReadLine());
         }
         catch
-        {
-            
+        {   
         }
 
         switch (menuSelection)
@@ -63,6 +66,8 @@ class Program
         Menu();
     }
 
+   //----------------------------------------------------------------------------\\
+
     public void IncorrectEntryPrompt()
     {
         ClearCurrentConsoleLine();
@@ -70,6 +75,8 @@ class Program
         Thread.Sleep(1000);
         Console.SetCursorPosition(0, Console.CursorTop);
     }
+
+//----------------------------------------------------------------------------\\
 
     public void DeleteRecipe()
     {
@@ -103,40 +110,55 @@ class Program
         } while (confirmInputCorrect == false);
     }
 
+//----------------------------------------------------------------------------\\
+
     public void CreateRecipe()
     {
-        int numIngredients = 0;
-        Boolean? conditionPass = false;
-        Boolean? isThereAnIngrediantToAdd;
+        Boolean isThereAnIngrediantToAdd = true;
+        string userInput;
+        Boolean confirmInputCorrect = false;
 
-        if (recipeList.Count > 0)
+        if (recipeList.Count() > 0)
         {
-            Console.WriteLine("A Recipe Is Already Present In Storage. " +
-                              "To Add A New Recipe, Storage Must Be Cleared");
-            Console.Write("Would You Like To Continue (Y/N): ");
-
-
-            if (Console.ReadLine().ToLower().Equals("y"))
+            do
             {
-                recipeList.Clear();
-            }
-            else if (Console.ReadLine().ToLower().Equals("n"))
-            {
-                return;
-            }
+                Console.WriteLine("A Recipe Is Already Present In Storage. " +
+                  "To Add A New Recipe, Storage Must Be Cleared");
+                Console.Write("Would You Like To Continue (Y/N): ");
+                userInput = Console.ReadLine().ToLower();
+
+                if (userInput.Equals("y"))
+                {
+                    recipeList.Clear();
+                    Console.WriteLine("\nRecipe Deleted!");
+                    Thread.Sleep(1000);
+                    confirmInputCorrect = true;
+                }
+                else if (userInput.Equals("n"))
+                {
+                    Console.Clear();
+                    confirmInputCorrect = true;
+                }
+                else
+                {
+                    IncorrectEntryPrompt();
+                }
+
+            } while (confirmInputCorrect == false);
         }
+        
+
         Console.Write("Please Enter The Name Of The New Recipe: ");
         Recipe newRecipe = new Recipe(Console.ReadLine());
+        Console.WriteLine();
 
         do
         {
-            Console.Write("\nDo You Have An Ingrediant To Add (Y/N): ");
+            Console.Write("Do You Have An Ingrediant To Add (Y/N): ");
+            userInput = Console.ReadLine().ToLower();
 
-            if (Console.ReadLine().ToLower().Equals("y"))
+            if (userInput.Equals("y"))
             {
-                Console.Clear();
-                PrintTitle();
-
                 string ingerdiantName;
                 double ingrediantQuantity = 0;
                 string ingrediantUnitOfMeasurement;
@@ -147,25 +169,51 @@ class Program
                 Console.Write("\nPlease Enter The Unit Of Measurement For \""
                               + ingerdiantName + "\": ");
                 ingrediantUnitOfMeasurement = Console.ReadLine();
+                Console.WriteLine();
 
-                while (conditionPass == false)
+                do
                 {
-                    Console.Write("\nPlease Enter The Quantity For\""
+                    Console.Write("Please Enter The Quantity For\""
                                   + ingerdiantName + "\" (x.xx): ");
-                    conditionPass = double.TryParse(Console.ReadLine(),
+                    confirmInputCorrect = double.TryParse(Console.ReadLine(),
                                                     out ingrediantQuantity);
-                    if (conditionPass == false)
-                    {
-                        Console.WriteLine("Wrong");
-                        Console.Write("\b");
-                    }
-                }
 
-                newRecipe.addIngredient(ingerdiantName, ingrediantUnitOfMeasurement, ingrediantQuantity);
+                    if (confirmInputCorrect == false)
+                    {
+                        IncorrectEntryPrompt();
+                    }
+                    else
+                    {
+                        confirmInputCorrect = true;
+                    }
+                } while (confirmInputCorrect == false);
+
+                newRecipe.addIngredient(ingerdiantName, ingrediantUnitOfMeasurement,
+                                        ingrediantQuantity);
+                Console.Clear();
+                PrintTitle();
             }
-            isThereAnIngrediantToAdd = true;
+
+            else if (userInput.Equals("n"))
+            {
+                if (newRecipe.IngredientsList.Count == 0)
+                {
+                    Console.WriteLine("\nNo Ingredients Added! New Recipe Did Not Save.");
+                    recipeList.Clear();
+                    Thread.Sleep(1500);
+                }
+                Console.Clear();
+                isThereAnIngrediantToAdd = false;
+            }
+
+            else
+            {
+                IncorrectEntryPrompt();
+            }
         } while (isThereAnIngrediantToAdd == true);
     }
+
+//----------------------------------------------------------------------------\\
 
     public void DisplayRecipe()
     {
@@ -180,6 +228,8 @@ class Program
         }
     }
 
+//----------------------------------------------------------------------------\\
+
     public static void ClearCurrentConsoleLine()
     {
         Console.SetCursorPosition(0, Console.CursorTop - 1);
@@ -188,3 +238,4 @@ class Program
     }
 }
 
+//----------------------------------------------------------------------------\\
