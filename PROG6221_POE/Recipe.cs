@@ -50,8 +50,8 @@ namespace PROG6221_POE
             foreach (Ingredient ingredient in IngredientsList)
             {
                 ingredientsToString += "\n" + double.Round((ingredient.Quantity * scale), 2)
-                    + " " + ingredient.Name + " "
-                    + ingredient.UnitOfMeasurement;
+                    + " " + ingredient.UnitOfMeasurement + " "
+                    + ingredient.Name;
             }
 
             foreach (string step in StepsList)

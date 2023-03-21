@@ -132,7 +132,6 @@ class Program
         {
             Console.WriteLine("A Recipe Is Already Present In Storage. " +
                               "To Add A New Recipe, Storage Must Be Cleared");
-            Console.WriteLine();
             do
             {
                 Console.Write("Would You Like To Continue (Y/N): ");
@@ -157,10 +156,20 @@ class Program
 
             } while (confirmInputCorrect == false);
         }
-        
 
-        Console.Write("Please Enter The Name Of The New Recipe: ");
-        Recipe newRecipe = new Recipe(Console.ReadLine());
+        Recipe newRecipe;
+        Console.WriteLine();
+
+        do
+        {
+            Console.Write("Please Enter The Name Of The New Recipe: ");
+            newRecipe = new Recipe(Console.ReadLine());
+            if (newRecipe.RecipeName.Equals(""))
+            {
+                IncorrectEntryPrompt();
+            }
+        } while (newRecipe.RecipeName.Equals(""));
+        
 
         do
         {
@@ -176,12 +185,32 @@ class Program
                 double ingrediantQuantity = 0;
                 string ingrediantUnitOfMeasurement;
 
-                Console.Write("\nPlease Enter The Name Of The Ingrediant: ");
-                ingerdiantName = Console.ReadLine();
+                Console.WriteLine();
 
-                Console.Write("\nPlease Enter The Unit Of Measurement For \""
+                do
+                {
+                    Console.Write("Please Enter The Name Of The Ingrediant: ");
+                    ingerdiantName = Console.ReadLine();
+                    if (ingerdiantName.Equals(""))
+                    {
+                        IncorrectEntryPrompt();
+                    }
+                    
+                } while (ingerdiantName.Equals(""));
+
+                Console.WriteLine();
+
+                do
+                {
+                Console.Write("Please Enter The Unit Of Measurement For \""
                               + ingerdiantName + "\": ");
                 ingrediantUnitOfMeasurement = Console.ReadLine();
+                    if (ingrediantUnitOfMeasurement.Equals(""))
+                    {
+                        IncorrectEntryPrompt();
+                    }
+                } while (ingrediantUnitOfMeasurement.Equals(""));
+
                 Console.WriteLine();
 
                 do
@@ -238,8 +267,16 @@ class Program
                 PrintTitle();
                 Console.WriteLine("Recipe: " + newRecipe.RecipeName);
                 Console.WriteLine();
+                do
+                {
                 Console.Write("Please Enter Step Number " + stepCount + ": ");
                 step = Console.ReadLine();
+
+                    if (step.Equals(""))
+                    {
+                        IncorrectEntryPrompt();
+                    }
+                } while (step.Equals(""));
                 newRecipe.addStep(step);
                 stepCount++;
             }
@@ -252,7 +289,10 @@ class Program
                     loadingAnimation();
                     return;
                 }
+                else
+                { 
                 isThereAStepToAdd = false;
+                }
             }
             else
             {
@@ -427,6 +467,5 @@ class Program
     }
 
 }
-
 //----------------------------------------------------------------------------\\
 
