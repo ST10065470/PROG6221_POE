@@ -73,7 +73,7 @@ class Program
     public void createRecipe()
     {
         int numIngredients = 0;
-        Boolean conditionPass = false;
+        Boolean? conditionPass = false;
         Boolean? isThereAnIngrediantToAdd;
 
         if (recipeList.Count > 0)
@@ -105,7 +105,7 @@ class Program
                 printTitle();
 
                 string ingerdiantName;
-                double ingrediantQuantity;
+                double ingrediantQuantity = 0;
                 string ingrediantUnitOfMeasurement;
 
                 Console.Write("\nPlease Enter The Name Of The Ingrediant: ");
@@ -115,10 +115,19 @@ class Program
                               + ingerdiantName + "\": ");
                 ingrediantUnitOfMeasurement = Console.ReadLine();
 
-                Console.Write("\nPlease Enter The Quantity For\""
-                              + ingerdiantName + "\": ");
+                while (conditionPass == false)
+                {
+                    Console.Write("\nPlease Enter The Quantity For\""
+                                  + ingerdiantName + "\" (x.xx): ");
+                    conditionPass = double.TryParse(Console.ReadLine(),
+                                                    out ingrediantQuantity);
+                    if (conditionPass == false)
+                    {
+                        Console.WriteLine("Wrong");
+                    }
+                }
 
-                newRecipe.addIngredient();
+                newRecipe.addIngredient(ingerdiantName, ingrediantUnitOfMeasurement, ingrediantQuantity);
             }
             isThereAnIngrediantToAdd = true;
         } while (isThereAnIngrediantToAdd == true);

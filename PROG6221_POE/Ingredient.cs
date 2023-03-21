@@ -21,7 +21,7 @@ namespace PROG6221_POE
 
         public void displayInfo()
         {
-            Console.wirteLine
+            Console.WriteLine("");
         }
     }
 }
