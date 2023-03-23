@@ -4,14 +4,14 @@ namespace PROG6221_POE;
 class Program
 {
     private List<Recipe> recipeList = new List<Recipe>();
-//----------------------------------------------------------------------------\\
+    //----------------------------------------------------------------------------\\
     static void Main(string[] args)
     {
         Program run = new Program();
         run.Menu();
     }
 
-//----------------------------------------------------------------------------\\
+    //----------------------------------------------------------------------------\\
 
     public void PrintTitle()
     {
@@ -20,7 +20,7 @@ class Program
         Console.WriteLine("---------------------");
     }
 
-//----------------------------------------------------------------------------\\
+    //----------------------------------------------------------------------------\\
 
     public void Menu()
     {
@@ -39,7 +39,7 @@ class Program
             menuSelection = int.Parse(Console.ReadLine());
         }
         catch
-        {   
+        {
         }
 
         switch (menuSelection)
@@ -67,7 +67,7 @@ class Program
         Menu();
     }
 
-   //----------------------------------------------------------------------------\\
+    //----------------------------------------------------------------------------\\
 
     public void IncorrectEntryPrompt()
     {
@@ -78,7 +78,7 @@ class Program
         Console.SetCursorPosition(0, Console.CursorTop + 1);
     }
 
-//----------------------------------------------------------------------------\\
+    //----------------------------------------------------------------------------\\
 
     public void DeleteRecipe()
     {
@@ -107,27 +107,28 @@ class Program
                 loadingAnimation();
                 confirmInputCorrect = true;
             }
-        else if (userInput.Equals("n"))
-        {
-            Console.Clear();
+            else if (userInput.Equals("n"))
+            {
+                Console.Clear();
                 confirmInputCorrect = true;
-        }
-        else
-        {
-            IncorrectEntryPrompt();
-        }
+            }
+            else
+            {
+                IncorrectEntryPrompt();
+            }
         } while (confirmInputCorrect == false);
     }
 
-//----------------------------------------------------------------------------\\
+    //----------------------------------------------------------------------------\\
 
     public void CreateRecipe()
     {
-        Boolean isThereAnIngrediantToAdd = true;
-        Boolean isThereAStepToAdd = true;
         string userInput;
-        Boolean confirmInputCorrect = false;
+        string recipeName;
+        int numIngredients;
+        int numSteps;
         int stepCount = 1;
+        Boolean confirmInputCorrect = false;
 
         if (recipeList.Count() > 0)
         {
@@ -163,186 +164,167 @@ class Program
         do
         {
             Console.Write("Please Enter The Name Of The New Recipe: ");
-            newRecipe = new Recipe(Console.ReadLine());
-            if (newRecipe.RecipeName.Equals(""))
+            recipeName = Console.ReadLine();
+
+            if (recipeName.Equals(""))
             {
                 IncorrectEntryPrompt();
                 PrintTitle();
             }
-        } while (newRecipe.RecipeName.Equals(""));
-        
+        } while (recipeName.Equals(""));
+
 
         do
         {
+            PrintTitle();
+            Console.WriteLine("Recipe: " + recipeName);
+            Console.WriteLine();
+            Console.Write("How Many Ingredients Do You Want To Add: ");
+            confirmInputCorrect = int.TryParse(Console.ReadLine(), out numIngredients);
+
+            if (confirmInputCorrect == false)
+            {
+                IncorrectEntryPrompt();
+            }
+
+        } while (confirmInputCorrect == false);
+
+
+        do
+        {
+            PrintTitle();
+            Console.WriteLine("Recipe: " + recipeName);
+            Console.WriteLine();
+            Console.Write("How Many Steps Do You Want To Add: ");
+            confirmInputCorrect = int.TryParse(Console.ReadLine(), out numSteps);
+
+            if (confirmInputCorrect == false)
+            {
+                IncorrectEntryPrompt();
+            }
+
+        } while (confirmInputCorrect == false);
+
+        newRecipe = new Recipe(recipeName, numIngredients, numSteps);
+
+        string ingrerdientName;
+        double ingredientQuantity = 0;
+        string ingredientUnitOfMeasurement = "";
+
+        for (int ingredient = 0; ingredient < numIngredients; ingredient++)
+        {
+            do
+            {
+                PrintTitle();
+                Console.WriteLine("Recipe: " + recipeName);
+                Console.Write("\nPlease Enter The Name Of The Ingrediant: ");
+                ingrerdientName = Console.ReadLine();
+                if (ingrerdientName.Equals(""))
+                {
+                    IncorrectEntryPrompt();
+                }
+
+            } while (ingrerdientName.Equals(""));
+
+            Console.WriteLine();
+
+            do
+            {
+                Console.Write("Please Select The Unit Of Measurement For \""
+                          + ingrerdientName + "\": ");
+                Console.WriteLine("\n1) Teaspoon(s)" +
+                                  "\n2) Tablespoon(s)" +
+                                  "\n3) Cup(s)" +
+                                  "\n4) Gram(s)" +
+                                  "\n5) Kilogram(s)");
+                Console.Write("\nEnter Your Selection: ");
+                userInput = (Console.ReadLine() + " ").ToLower().Substring(0, 2);
+
+                confirmInputCorrect = false;
+
+                switch (userInput)
+                {
+                    case "1 ":
+                    case "1)":
+                    case "te":
+                        ingredientUnitOfMeasurement = "Teaspoon(s)";
+                        confirmInputCorrect = true;
+                        break;
+                    case "2 ":
+                    case "2)":
+                    case "ta":
+                        ingredientUnitOfMeasurement = "Tablespoon(s)";
+                        confirmInputCorrect = true;
+                        break;
+                    case "3 ":
+                    case "3)":
+                    case "cu":
+                        ingredientUnitOfMeasurement = "Cup(s)";
+                        confirmInputCorrect = true;
+                        break;
+                    case "4 ":
+                    case "4)":
+                    case "gr":
+                        ingredientUnitOfMeasurement = "Gram(s)";
+                        confirmInputCorrect = true;
+                        break;
+                    case "5 ":
+                    case "5)":
+                    case "ki":
+                        ingredientUnitOfMeasurement = "Kilogram(s)";
+                        confirmInputCorrect = true;
+                        break;
+                    default:
+                        IncorrectEntryPrompt();
+                        break;
+                }
+
+            } while (confirmInputCorrect == false);
+
+            Console.WriteLine();
+
+            do
+            {
+                Console.Write("Please Enter The Quantity For \""
+                              + ingrerdientName + "\" (x.xx): ");
+                confirmInputCorrect = double.TryParse(Console.ReadLine(),
+                                                out ingredientQuantity);
+
+                if (confirmInputCorrect == false)
+                {
+                    IncorrectEntryPrompt();
+                }
+                else
+                {
+                    confirmInputCorrect = true;
+                }
+            } while (confirmInputCorrect == false);
+
+            newRecipe.addIngredient(ingrerdientName, ingredientUnitOfMeasurement,
+                                    ingredientQuantity);
+
+        }
+        for (int step = 0; step < numSteps; step++)
+        {
+            string stepInfo;
+
             PrintTitle();
             Console.WriteLine("Recipe: " + newRecipe.RecipeName);
             Console.WriteLine();
-            Console.Write("Do You Have An Ingrediant To Add (Y/N): ");
-            userInput = Console.ReadLine().ToLower();
-
-            if (userInput.Equals("y"))
+            do
             {
-                string ingerdiantName;
-                double ingrediantQuantity = 0;
-                string ingrediantUnitOfMeasurement = "";
-
-                Console.WriteLine();
-
-                do
-                {
-                    Console.Write("Please Enter The Name Of The Ingrediant: ");
-                    ingerdiantName = Console.ReadLine();
-                    if (ingerdiantName.Equals(""))
-                    {
-                        IncorrectEntryPrompt();
-                    }
-                    
-                } while (ingerdiantName.Equals(""));
-
-                Console.WriteLine();
-
-                do
-                {
-                    Console.Write("Please Select The Unit Of Measurement For \""
-                              + ingerdiantName + "\": ");
-                    Console.WriteLine("\n1) Teaspoon(s)" +
-                                      "\n2) Tablespoon(s)" +
-                                      "\n3) Cup(s)" +
-                                      "\n4) Gram(s)" +
-                                      "\n5) Kilogram(s)");
-                    Console.Write("\nEnter Your Selection: ");
-                    userInput = (Console.ReadLine() + " ").ToLower().Substring(0, 2);
-
-                    confirmInputCorrect = false;
-
-                    switch (userInput)
-                    {
-                        case "1 ":
-                        case "1)":
-                        case "te":
-                            ingrediantUnitOfMeasurement = "Teaspoon(s)";
-                            confirmInputCorrect = true;
-                            break;
-                        case "2 ":
-                        case "2)":
-                        case "ta":
-                            ingrediantUnitOfMeasurement = "Tablespoon(s)";
-                            confirmInputCorrect = true;
-                            break;
-                        case "3 ":
-                        case "3)":
-                        case "cu":
-                            ingrediantUnitOfMeasurement = "Cup(s)";
-                            confirmInputCorrect = true;
-                            break;
-                        case "4 ":
-                        case "4)":
-                        case "gr":
-                            ingrediantUnitOfMeasurement = "Gram(s)";
-                            confirmInputCorrect = true;
-                            break;
-                        case "5 ":
-                        case "5)":
-                        case "ki":
-                            ingrediantUnitOfMeasurement = "Kilogram(s)";
-                            confirmInputCorrect = true;
-                            break;
-                        default:
-                            IncorrectEntryPrompt();
-                            break;
-                    }
-                    
-                } while (confirmInputCorrect == false);
-
-                Console.WriteLine();
-
-                do
-                {
-                    Console.Write("Please Enter The Quantity For \""
-                                  + ingerdiantName + "\" (x.xx): ");
-                    confirmInputCorrect = double.TryParse(Console.ReadLine(),
-                                                    out ingrediantQuantity);
-
-                    if (confirmInputCorrect == false)
-                    {
-                        IncorrectEntryPrompt();
-                    }
-                    else
-                    {
-                        confirmInputCorrect = true;
-                    }
-                } while (confirmInputCorrect == false);
-
-                newRecipe.addIngredient(ingerdiantName, ingrediantUnitOfMeasurement,
-                                        ingrediantQuantity);
-            }
-
-            else if (userInput.Equals("n"))
-            {
-                if (newRecipe.IngredientsList.Count == 0)
-                {
-                    Console.Write("\nNo Ingredients Added! New Recipe Did Not Save");
-                    recipeList.Clear();
-                    loadingAnimation();
-                    return;
-                }
-                Console.Clear();
-                isThereAnIngrediantToAdd = false;
-            }
-
-            else
-            {
-                IncorrectEntryPrompt();
-            }
-        } while (isThereAnIngrediantToAdd == true);
-
-        do
-        {
-            PrintTitle();
-            Console.WriteLine("Recipe: " + newRecipe.RecipeName);
-            Console.Write("\nDo You Have A Step To Add (Y/N): ");
-            userInput = Console.ReadLine().ToLower();
-
-            if (userInput.Equals("y"))
-            {
-                string step;
-
-                PrintTitle();
-                Console.WriteLine("Recipe: " + newRecipe.RecipeName);
-                Console.WriteLine();
-                do
-                {
                 Console.Write("Please Enter Step Number " + stepCount + ": ");
-                step = Console.ReadLine();
+                stepInfo = Console.ReadLine();
 
-                    if (step.Equals(""))
-                    {
-                        IncorrectEntryPrompt();
-                    }
-                } while (step.Equals(""));
-                newRecipe.addStep(step);
-                stepCount++;
-            }
-            else if (userInput.Equals("n"))
-            {
-                if (newRecipe.StepsList.Count() == 0)
+                if (stepInfo.Equals(""))
                 {
-                    Console.Write("\nNo Steps Added! New Recipe Did Not Save");
-                    recipeList.Clear();
-                    loadingAnimation();
-                    return;
+                    IncorrectEntryPrompt();
                 }
-                else
-                { 
-                isThereAStepToAdd = false;
-                }
-            }
-            else
-            {
-                IncorrectEntryPrompt();
-            }
+            } while (stepInfo.Equals(""));
 
-        } while (isThereAStepToAdd == true);
+            newRecipe.addStep(stepInfo);
+        }
+
 
         recipeList.Add(newRecipe);
         PrintTitle();
@@ -350,7 +332,9 @@ class Program
         loadingAnimation();
     }
 
-//----------------------------------------------------------------------------\\
+
+
+    //----------------------------------------------------------------------------\\
 
     public void DisplayRecipe()
     {
@@ -444,7 +428,7 @@ class Program
         } while (true);
     }
 
-//----------------------------------------------------------------------------\\
+    //----------------------------------------------------------------------------\\
 
     public static void ClearCurrentConsoleLine()
     {
@@ -453,9 +437,10 @@ class Program
         Console.SetCursorPosition(0, Console.CursorTop - 1);
     }
 
-//----------------------------------------------------------------------------\\
+    //----------------------------------------------------------------------------\\
 
-    public void loadingAnimation() {
+    public void loadingAnimation()
+    {
         for (int pos = 0; pos < 3; pos++)
         {
             Thread.Sleep(400);
@@ -464,7 +449,7 @@ class Program
         Thread.Sleep(400);
     }
 
-//----------------------------------------------------------------------------\\
+    //----------------------------------------------------------------------------\\
     public double setScale()
     {
         string scale;
