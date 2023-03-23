@@ -17,6 +17,7 @@ class Program
     public void PrintTitle()
     {
         Console.Clear();
+        Console.ResetColor();
         Console.WriteLine("RECIPE BOOK PROGRAMME");
         Console.WriteLine("---------------------");
     }
@@ -78,6 +79,7 @@ class Program
         loadingAnimation(Console.ForegroundColor);
         ClearCurrentConsoleLine();
         Console.SetCursorPosition(0, Console.CursorTop + 1);
+        Console.ResetColor();
     }
 
     //----------------------------------------------------------------------------\\
@@ -131,7 +133,6 @@ class Program
         string recipeName;
         int numIngredients;
         int numSteps;
-        int stepCount = 1;
         Boolean confirmInputCorrect = false;
 
         if (recipeList.Count() > 0)
@@ -233,8 +234,7 @@ class Program
 
             Console.WriteLine();
 
-            do
-            {
+
                 Console.Write("Please Select The Unit Of Measurement For \""
                           + ingrerdientName + "\": ");
                 Console.WriteLine("\n1) Teaspoon(s)" +
@@ -242,8 +242,11 @@ class Program
                                   "\n3) Cup(s)" +
                                   "\n4) Gram(s)" +
                                   "\n5) Kilogram(s)");
-                Console.Write("\nEnter Your Selection: ");
-                userInput = (Console.ReadLine() + " ").ToLower().Substring(0, 2);
+            Console.WriteLine();
+            do
+            {
+                Console.Write("Enter Your Selection: ");
+                userInput = (Console.ReadLine() + "   ").ToLower().Substring(0, 2);
 
                 confirmInputCorrect = false;
 
@@ -318,7 +321,7 @@ class Program
             Console.WriteLine();
             do
             {
-                Console.Write("Please Enter Step Number " + stepCount + ": ");
+                Console.Write("Please Enter Step Number " + (step + 1) + ": ");
                 stepInfo = Console.ReadLine();
 
                 if (stepInfo.Equals(""))
@@ -330,9 +333,9 @@ class Program
             newRecipe.addStep(stepInfo);
         }
 
-        Console.ForegroundColor = ConsoleColor.Green;
         recipeList.Add(newRecipe);
         PrintTitle();
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("Recipe Saved");
         loadingAnimation(Console.ForegroundColor);
     }
@@ -439,7 +442,7 @@ class Program
     public static void ClearCurrentConsoleLine()
     {
         Console.SetCursorPosition(0, Console.CursorTop - 1);
-        Console.Write(new string(' ', Console.WindowWidth));
+        Console.Write(new string(' ', Console.WindowWidth + 100));
         Console.SetCursorPosition(0, Console.CursorTop - 1);
     }
 
@@ -454,7 +457,6 @@ class Program
             Console.Write(".");
         }
         Thread.Sleep(400);
-        Console.ForegroundColor = ConsoleColor.White;
     }
 
     //----------------------------------------------------------------------------\\
