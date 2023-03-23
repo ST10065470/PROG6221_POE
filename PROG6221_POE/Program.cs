@@ -1,4 +1,5 @@
-﻿using static System.Formats.Asn1.AsnWriter;
+﻿using System.Drawing;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace PROG6221_POE;
 class Program
@@ -71,9 +72,10 @@ class Program
 
     public void IncorrectEntryPrompt()
     {
+        Console.ForegroundColor = ConsoleColor.Red;
         ClearCurrentConsoleLine();
         Console.Write("Invalid Entry! Press Try Again");
-        loadingAnimation();
+        loadingAnimation(Console.ForegroundColor);
         ClearCurrentConsoleLine();
         Console.SetCursorPosition(0, Console.CursorTop + 1);
     }
@@ -89,8 +91,9 @@ class Program
 
         if (recipeList.Count() == 0)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("No Recipes Saved");
-            loadingAnimation();
+            loadingAnimation(Console.ForegroundColor);
             return;
         }
 
@@ -101,10 +104,11 @@ class Program
 
             if (userInput.Equals("y"))
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 recipeList.Clear();
                 PrintTitle();
                 Console.Write("Recipe Deleted");
-                loadingAnimation();
+                loadingAnimation(Console.ForegroundColor);
                 confirmInputCorrect = true;
             }
             else if (userInput.Equals("n"))
@@ -141,9 +145,10 @@ class Program
 
                 if (userInput.Equals("y"))
                 {
+                    Console.ForegroundColor = ConsoleColor.Green;
                     recipeList.Clear();
                     Console.Write("\nRecipe Deleted");
-                    loadingAnimation();
+                    loadingAnimation(Console.ForegroundColor);
                     confirmInputCorrect = true;
                     PrintTitle();
                 }
@@ -325,11 +330,11 @@ class Program
             newRecipe.addStep(stepInfo);
         }
 
-
+        Console.ForegroundColor = ConsoleColor.Green;
         recipeList.Add(newRecipe);
         PrintTitle();
         Console.Write("Recipe Saved");
-        loadingAnimation();
+        loadingAnimation(Console.ForegroundColor);
     }
 
 
@@ -348,8 +353,9 @@ class Program
 
         if (recipeList.Count == 0)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("No Recipes Saved");
-            loadingAnimation();
+            loadingAnimation(Console.ForegroundColor);
             return;
         }
 
@@ -439,14 +445,16 @@ class Program
 
     //----------------------------------------------------------------------------\\
 
-    public void loadingAnimation()
+    public void loadingAnimation(ConsoleColor colour)
     {
+        Console.ForegroundColor = colour;
         for (int pos = 0; pos < 3; pos++)
         {
             Thread.Sleep(400);
             Console.Write(".");
         }
         Thread.Sleep(400);
+        Console.ForegroundColor = ConsoleColor.White;
     }
 
     //----------------------------------------------------------------------------\\
