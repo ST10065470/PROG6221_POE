@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PROG6221_POE
 {
-    internal class Recipe
+    internal class Ingredient
     {
 
 
