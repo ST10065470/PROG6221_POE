@@ -16,8 +16,8 @@ class Program
     public void PrintTitle()
     {
         Console.Clear();
-        Console.WriteLine("RECIPE BOOK PROGRAMME" +
-                          "\n---------------------");
+        Console.WriteLine("RECIPE BOOK PROGRAMME");
+        Console.WriteLine("---------------------");
     }
 
 //----------------------------------------------------------------------------\\
@@ -100,12 +100,13 @@ class Program
             userInput = Console.ReadLine().ToLower();
 
             if (userInput.Equals("y"))
-        {
-            recipeList.Clear();
-            Console.Write("\n\nRecipe Deleted");
+            {
+                recipeList.Clear();
+                PrintTitle();
+                Console.Write("Recipe Deleted");
                 loadingAnimation();
-            confirmInputCorrect = true;
-        }
+                confirmInputCorrect = true;
+            }
         else if (userInput.Equals("n"))
         {
             Console.Clear();
@@ -158,7 +159,6 @@ class Program
         }
 
         Recipe newRecipe;
-        Console.WriteLine();
 
         do
         {
@@ -167,6 +167,7 @@ class Program
             if (newRecipe.RecipeName.Equals(""))
             {
                 IncorrectEntryPrompt();
+                PrintTitle();
             }
         } while (newRecipe.RecipeName.Equals(""));
         
@@ -183,7 +184,7 @@ class Program
             {
                 string ingerdiantName;
                 double ingrediantQuantity = 0;
-                string ingrediantUnitOfMeasurement;
+                string ingrediantUnitOfMeasurement = "";
 
                 Console.WriteLine();
 
@@ -202,14 +203,56 @@ class Program
 
                 do
                 {
-                Console.Write("Please Enter The Unit Of Measurement For \""
+                    Console.Write("Please Select The Unit Of Measurement For \""
                               + ingerdiantName + "\": ");
-                ingrediantUnitOfMeasurement = Console.ReadLine();
-                    if (ingrediantUnitOfMeasurement.Equals(""))
+                    Console.WriteLine("\n1) Teaspoon(s)" +
+                                      "\n2) Tablespoon(s)" +
+                                      "\n3) Cup(s)" +
+                                      "\n4) Gram(s)" +
+                                      "\n5) Kilogram(s)");
+                    Console.Write("\nEnter Your Selection: ");
+                    userInput = (Console.ReadLine() + " ").ToLower().Substring(0, 2);
+
+                    confirmInputCorrect = false;
+
+                    switch (userInput)
                     {
-                        IncorrectEntryPrompt();
+                        case "1 ":
+                        case "1)":
+                        case "te":
+                            ingrediantUnitOfMeasurement = "Teaspoon(s)";
+                            confirmInputCorrect = true;
+                            break;
+                        case "2 ":
+                        case "2)":
+                        case "ta":
+                            ingrediantUnitOfMeasurement = "Tablespoon(s)";
+                            confirmInputCorrect = true;
+                            break;
+                        case "3 ":
+                        case "3)":
+                        case "cu":
+                            ingrediantUnitOfMeasurement = "Cup(s)";
+                            confirmInputCorrect = true;
+                            break;
+                        case "4 ":
+                        case "4)":
+                        case "gr":
+                            ingrediantUnitOfMeasurement = "Gram(s)";
+                            confirmInputCorrect = true;
+                            break;
+                        case "5 ":
+                        case "5)":
+                        case "ki":
+                            ingrediantUnitOfMeasurement = "Kilogram(s)";
+                            confirmInputCorrect = true;
+                            break;
+                        default:
+                            IncorrectEntryPrompt();
+                            break;
                     }
-                } while (ingrediantUnitOfMeasurement.Equals(""));
+                    
+                } while (confirmInputCorrect == false);
 
                 Console.WriteLine();
 
@@ -415,10 +458,10 @@ class Program
     public void loadingAnimation() {
         for (int pos = 0; pos < 3; pos++)
         {
-            Thread.Sleep(500);
+            Thread.Sleep(400);
             Console.Write(".");
         }
-        Thread.Sleep(500);
+        Thread.Sleep(400);
     }
 
 //----------------------------------------------------------------------------\\
@@ -430,7 +473,7 @@ class Program
 
         do
         {
-            Console.Write("Enter Your Selection Of Scale: ");
+            Console.Write("\nEnter Your Selection Of Scale: ");
             scale = (Console.ReadLine() + "  ").ToLower().Substring(0, 2);
 
             switch (scale)
