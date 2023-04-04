@@ -4,6 +4,7 @@ using static System.Formats.Asn1.AsnWriter;
 namespace PROG6221_POE;
 class Program
 {
+    //A list which stores created recipes
     private List<Recipe> recipeList = new List<Recipe>();
     //----------------------------------------------------------------------------\\
     static void Main(string[] args)
@@ -14,13 +15,23 @@ class Program
 
     //----------------------------------------------------------------------------\\
 
+    /* This method clears the console, resets the console colours to their defaults,
+    and prints the programme title and a separator. */
     public void PrintTitle()
     {
+        // Clear the console.
         Console.Clear();
+
+        // Reset the console colours to their defaults.
         Console.ResetColor();
+
+        // Print the programme title.
         Console.WriteLine("RECIPE BOOK PROGRAMME");
+
+        // Print a line to separate the title.
         Console.WriteLine("---------------------");
     }
+
 
     //----------------------------------------------------------------------------\\
 
@@ -28,14 +39,15 @@ class Program
     {
         int menuSelection = 0;
 
+        // Print the programme title and menu options.
         PrintTitle();
-
         Console.WriteLine("1) Enter New Recipe" +
                           "\n2) Display Recipe" +
                           "\n3) Delete Recipe" +
                           "\n4) Exit");
         Console.Write("\nEnter Your Numeric Selection: ");
 
+        // Attempt to parse the user's menu selection as an integer.
         try
         {
             menuSelection = int.Parse(Console.ReadLine());
@@ -44,55 +56,81 @@ class Program
         {
         }
 
+        // Execute the appropriate action based on the user's selection.
         switch (menuSelection)
         {
             case 1:
+                // If the user selects option 1, create a new recipe.
                 PrintTitle();
                 CreateRecipe();
                 break;
             case 2:
+                // If the user selects option 2, display a recipe.
                 DisplayRecipe();
                 break;
             case 3:
+                // If the user selects option 3, delete a recipe.
                 DeleteRecipe();
                 break;
             case 4:
+                // If the user selects option 4, exit the programme.
                 Console.Clear();
                 Environment.Exit(0);
                 break;
             default:
+                // If the user enters an invalid selection, prompt them to try again.
                 IncorrectEntryPrompt();
                 Console.Clear();
                 Menu();
                 break;
         }
+
+        // After the selected action is executed, the menu displays again.
         Menu();
     }
 
     //----------------------------------------------------------------------------\\
 
+    /*
+    Displays an error message prompting the user to try again after entering invalid input.
+    */
     public void IncorrectEntryPrompt()
     {
+        // Set text text colour to red
         Console.ForegroundColor = ConsoleColor.Red;
+        // Clear the current console line
         ClearCurrentConsoleLine();
-        Console.Write("Invalid Entry! Press Try Again");
+        Console.Write("Invalid Entry! Press Try Again");// Display the error message to the user
+        // Show a loading animation using the red text colour
         loadingAnimation(Console.ForegroundColor);
+        // Clear the current console line
         ClearCurrentConsoleLine();
+        // Move the cursor to the start of the next line
         Console.SetCursorPosition(0, Console.CursorTop + 1);
+        // Reset the console text colour to default
         Console.ResetColor();
     }
 
+
     //----------------------------------------------------------------------------\\
 
+    /*
+    Deletes a recipe from the list of saved recipes, after prompting the user for confirmation.
+    If there are no saved recipes to delete, an error message is displayed and the method exits.
+    */
     public void DeleteRecipe()
     {
+        // Print the title of the recipe book
         PrintTitle();
 
+        // Initialize variables for user input and confirmation flag
         Boolean confirmInputCorrect = false;
         string userInput;
 
-        if (recipeList.Count() == 0)
+        // Check if there are any saved recipes
+        if (recipeList.Count == 0)
         {
+            // Display an error message if there are no saved recipes
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("No Recipes Saved");
             loadingAnimation(Console.ForegroundColor);
@@ -101,29 +139,41 @@ class Program
 
         do
         {
+            // Print the title of the recipe book
+            PrintTitle();
+
+            // Prompt the user for confirmation to delete the saved recipe
             Console.Write("Are You Sure You Want To Delete The Saved Recipe (Y/N): ");
             userInput = Console.ReadLine().ToLower();
 
+            // If the user confirms deletion, clear the list of saved recipes
             if (userInput.Equals("y"))
             {
+                // Delete the saved recipe and display a success message
                 Console.ForegroundColor = ConsoleColor.Green;
                 recipeList.Clear();
                 PrintTitle();
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("Recipe Deleted");
                 loadingAnimation(Console.ForegroundColor);
+                Console.ResetColor();
                 confirmInputCorrect = true;
             }
+            // If the user cancels deletion, clear the console and exit the method
             else if (userInput.Equals("n"))
             {
                 Console.Clear();
                 confirmInputCorrect = true;
             }
+            // If the user enters invalid input, display an error message
             else
             {
                 IncorrectEntryPrompt();
             }
+            //Repeat if incorrect input was entered
         } while (confirmInputCorrect == false);
     }
+
 
     //----------------------------------------------------------------------------\\
 
@@ -133,7 +183,7 @@ class Program
         string recipeName;
         int numIngredients;
         int numSteps;
-        Boolean confirmInputCorrect = false;
+        Boolean confirmInputCorrect;
 
         if (recipeList.Count() > 0)
         {
@@ -143,6 +193,7 @@ class Program
             {
                 Console.Write("Would You Like To Continue (Y/N): ");
                 userInput = Console.ReadLine().ToLower();
+                confirmInputCorrect = false;
 
                 if (userInput.Equals("y"))
                 {
@@ -188,7 +239,16 @@ class Program
             Console.Write("How Many Ingredients Do You Want To Add: ");
             confirmInputCorrect = int.TryParse(Console.ReadLine(), out numIngredients);
 
-            if (confirmInputCorrect == false)
+            if (numIngredients == 0)
+            {
+                ClearCurrentConsoleLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("No Ingredients To Be Added. Create Recipe Aborted");
+                loadingAnimation(Console.ForegroundColor);
+                return;
+            }
+
+            else if (confirmInputCorrect == false)
             {
                 IncorrectEntryPrompt();
             }
@@ -204,7 +264,16 @@ class Program
             Console.Write("How Many Steps Do You Want To Add: ");
             confirmInputCorrect = int.TryParse(Console.ReadLine(), out numSteps);
 
-            if (confirmInputCorrect == false)
+            if (numSteps == 0)
+            {
+                ClearCurrentConsoleLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("No Steps To Be Added. Create Recipe Aborted");
+                loadingAnimation(Console.ForegroundColor);
+                return;
+            }
+
+            else if (confirmInputCorrect == false)
             {
                 IncorrectEntryPrompt();
             }
@@ -235,13 +304,13 @@ class Program
             Console.WriteLine();
 
 
-                Console.Write("Please Select The Unit Of Measurement For \""
-                          + ingrerdientName + "\": ");
-                Console.WriteLine("\n1) Teaspoon(s)" +
-                                  "\n2) Tablespoon(s)" +
-                                  "\n3) Cup(s)" +
-                                  "\n4) Gram(s)" +
-                                  "\n5) Kilogram(s)");
+            Console.Write("Please Select The Unit Of Measurement For \""
+                      + ingrerdientName + "\": ");
+            Console.WriteLine("\n1) Teaspoon(s)" +
+                              "\n2) Tablespoon(s)" +
+                              "\n3) Cup(s)" +
+                              "\n4) Gram(s)" +
+                              "\n5) Kilogram(s)");
             Console.WriteLine();
             do
             {
@@ -343,33 +412,40 @@ class Program
 
 
     //----------------------------------------------------------------------------\\
-
+    // This method displays a selected recipe with ingredients being scaled
     public void DisplayRecipe()
     {
+        // Print title of the application.
         PrintTitle();
 
+        // Initialise variables for recipe selection and scale.
         int recipeNum = 1;
         int recipeIndex = 0;
         double recipeScale = 0;
         Boolean confirmInputCorrect = false;
         string userInput;
 
+        // Check if there are any recipes saved.
         if (recipeList.Count == 0)
         {
+            // Display an error message and return to the.
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("No Recipes Saved");
             loadingAnimation(Console.ForegroundColor);
             return;
         }
 
+        // Prompt the user to select a recipe.
         Console.WriteLine("Please Select The Recipe You Want To Display:");
 
+        // Display the list of recipes.
         foreach (Recipe recipe in recipeList)
         {
             Console.WriteLine(recipeNum + ") " + recipe.RecipeName);
             recipeNum++;
         }
 
+        // Get the user's recipe selection.
         do
         {
             Console.Write("\nEnter Your Numeric Selection: ");
@@ -386,21 +462,25 @@ class Program
 
         } while (confirmInputCorrect == false);
 
+        // Display the selected recipe.
         PrintTitle();
         Console.WriteLine("Recipe: " + recipeList[recipeIndex].RecipeName + "\n");
+
+        // Prompt the user to select a scale factor.
         Console.Write("Select Your Scale:" +
                           "\n1) Default (1x)" +
                           "\n2) Double (2x)" +
                           "\n3) Triple (3x)" +
                           "\n4) Half (0.5)");
-        //Console.Write("\nEnter Your Selection Of Scale: ");
         Console.WriteLine();
         recipeScale = setScale();
 
+        // Display the recipe with the chosen scale factor.
         PrintTitle();
         Console.WriteLine("Recipe: " + recipeList[recipeIndex].RecipeName + "\n");
         Console.WriteLine(recipeList[recipeIndex].displayRecipe(recipeScale));
 
+        // Allow the user to reset the scale or return to the menu.
         confirmInputCorrect = false;
 
         do
@@ -413,6 +493,7 @@ class Program
 
             if ("1) reset scale".Contains(userInput))
             {
+                // Reset the scale and display the recipe with the new scale factor.
                 PrintTitle();
                 Console.WriteLine("Recipe: " + recipeList[recipeIndex].RecipeName + "\n");
                 Console.Write("Select Your Scale:" +
@@ -428,6 +509,7 @@ class Program
             }
             else if ("2) Return To Menu".Contains(userInput))
             {
+                // Return to the menu.
                 return;
             }
             else
@@ -438,72 +520,86 @@ class Program
     }
 
     //----------------------------------------------------------------------------\\
-
+    //A method that clears the currect line where the curos sits of text
     public static void ClearCurrentConsoleLine()
     {
-        Console.SetCursorPosition(0, Console.CursorTop - 1);
-        Console.Write(new string(' ', Console.WindowWidth + 100));
-        Console.SetCursorPosition(0, Console.CursorTop - 1);
+        Console.SetCursorPosition(0, Console.CursorTop - 1); //Setting the cursor position to the begining of the current line
+        Console.Write(new string(' ', Console.WindowWidth + 100));//Printing blank spaces for the length of the console + 100 characters over the existing text
+        Console.SetCursorPosition(0, Console.CursorTop - 1); //Setting the cursor position to the begining of the current line
     }
 
     //----------------------------------------------------------------------------\\
-
-    public void loadingAnimation(ConsoleColor colour)
-    {
-        Console.ForegroundColor = colour;
-        for (int pos = 0; pos < 3; pos++)
+    //A method which prints a loadign animation when called
+        public void loadingAnimation(ConsoleColor colour)
         {
+            //Setting the colour of the text
+            Console.ForegroundColor = colour;
+            //A for loop which runs 3 times to print 3 '.' characters
+            for (int pos = 0; pos < 3; pos++)
+            {
+                Thread.Sleep(400);//Making the thread pause for 400 milliseconds, creating the animation effect
+                Console.Write(".");
+            }
             Thread.Sleep(400);
-            Console.Write(".");
         }
-        Thread.Sleep(400);
-    }
 
     //----------------------------------------------------------------------------\\
+    // A  method that sets the recipe scale and returns it as a double data type
     public double setScale()
     {
-        string scale;
-        double recipeScale = 1;
-        Boolean confirmInputCorrect = false;
+        //Variables
+        string scale;//Store user input for the scale
+        double recipeScale = 1;//Store the recipe scale
+        Boolean confirmInputCorrect = false;//A boolean used to indicate whether the user input is correct or not
 
+        //A do-while loop to prompt the user to enter the scale until the input is correct
         do
         {
+            // Prompt the user to enter their selection of scale
             Console.Write("\nEnter Your Selection Of Scale: ");
+            // Read the user input from the console, convert it to lowercase, and trim it to 2 characters
             scale = (Console.ReadLine() + "  ").ToLower().Substring(0, 2);
 
+            // Start a switch statement to set the appropriate scale based on user input
             switch (scale)
             {
+                // If the user input matches any of these cases, set the recipe scale to 0.5
                 case "4 ":
                 case "0.":
                 case "ha":
                     recipeScale = 0.5;
                     confirmInputCorrect = true;
                     break;
+                // If the user input matches any of these cases, set the recipe scale to 1
                 case "1 ":
                 case "de":
                     recipeScale = 1;
                     confirmInputCorrect = true;
                     break;
+                // If the user input matches any of these cases, set the recipe scale to 2
                 case "2 ":
                 case "do":
                     recipeScale = 2;
                     confirmInputCorrect = true;
                     break;
+                // If the user input matches any of these cases, set the recipe scale to 3
                 case "3 ":
                 case "tr":
                     recipeScale = 3;
                     confirmInputCorrect = true;
                     break;
+                // If the user input does not match any of the cases, call the IncorrectEntryPrompt() method
                 default:
                     IncorrectEntryPrompt();
                     break;
             }
 
+            // Continue the loop until the user input is correct
         } while (confirmInputCorrect == false);
 
+        // Return the recipe scale as a double
         return recipeScale;
     }
-
 }
 //----------------------------------------------------------------------------\\
 

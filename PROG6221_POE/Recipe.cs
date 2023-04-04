@@ -1,12 +1,12 @@
 ﻿using System;
 namespace PROG6221_POE
 {
-	public class Recipe
-	{
+    public class Recipe
+    {
         private Ingredient[] ingredientsList;
         private string[] stepsList;
         private string recipeName;
-//----------------------------------------------------------------------------\\
+        //----------------------------------------------------------------------------\\
 
         public string RecipeName { get => recipeName; set => recipeName = value; }
         public Ingredient[] IngredientsList { get => ingredientsList; set => ingredientsList = value; }
@@ -21,42 +21,54 @@ namespace PROG6221_POE
             this.RecipeName = recipeName;
         }
 
-//----------------------------------------------------------------------------\\
+        //----------------------------------------------------------------------------\\
 
         public void addIngredient(string ingredientName, string unitOfMeasurement,
                                   double ingredientQuantity)
         {
+            // Initialize a counter variable.
             int index = 0;
+
+            // Create an instance of the Ingredient class based on user-provided parameters.
             Ingredient ingredientToAdd = new Ingredient(ingredientName, unitOfMeasurement,
                                                         ingredientQuantity);
 
-            for  (index = 0;  index < IngredientsList.Count(); index++)
+            // Search through the IngredientsList collection for an empty position.
+            // If found, increment 'index', until a null is encountered or end of collection is reached.
+            for (index = 0; index < IngredientsList.Count(); index++)
             {
                 if (IngredientsList[index] == null)
                 {
                     break;
                 }
             }
+
+            // Add the newly created Ingredient object to IngredientsList at next available position. 
             IngredientsList[index] = ingredientToAdd;
         }
 
-//----------------------------------------------------------------------------\\
+        //----------------------------------------------------------------------------\\
 
+        // This method adds a step to StepsList
         public void addStep(string step)
         {
-            int index = 0;
+            int index = 0; // Initialize index variable with zero
 
+            // Loop through the StepsList
             for (index = 0; index < StepsList.Count(); index++)
             {
+                // If current item in list is null, exit loop
                 if (StepsList[index] == null)
                 {
                     break;
                 }
             }
+
+            // Place the new "step" in first empty location or at end of list 
             StepsList[index] = step;
         }
 
-//----------------------------------------------------------------------------\\
+        //----------------------------------------------------------------------------\\
 
         public string displayRecipe(double scale)
         {
@@ -83,14 +95,17 @@ namespace PROG6221_POE
             return recipe;
         }
 
-//----------------------------------------------------------------------------\\
-
+        //----------------------------------------------------------------------------\\
+        /* This method takes in a scale factor, a quantity value,
+        and a string representing the unit of measurement for that value
+        and returns the correct unit of measurement based on the quantity entered*/
         public string correctQuantityAndMeasurement(double scale, double quantity,
                                                string unitOfMeasurement)
         {
-            double scaleCorrectedQuantity = (quantity * scale);
-            string correctQuantityAndMeasurement = scaleCorrectedQuantity + " " + unitOfMeasurement;
+            double scaleCorrectedQuantity = (quantity * scale); //The scale corrected quantity
+            string correctQuantityAndMeasurement = scaleCorrectedQuantity + " " + unitOfMeasurement; //A string which stores the quantity and unit of measurement
 
+            // If originally entered measurements was teaspoons:
             if (unitOfMeasurement.Equals("Teaspoon(s)"))
             {
                 if ((scaleCorrectedQuantity % 4) == 0)
@@ -115,27 +130,33 @@ namespace PROG6221_POE
                 }
 
             }
-
+            // If originally entered measurements was tablespoons:
             else if (unitOfMeasurement.Equals("Tablespoon(s)"))
             {
                 if ((scaleCorrectedQuantity % 16) == 0)
                 {
                     correctQuantityAndMeasurement = "Cup(s)";
-                    quantity = quantity / 16.00;
+                    scaleCorrectedQuantity = scaleCorrectedQuantity / 16.00;
 
-                    return quantity + " " + correctQuantityAndMeasurement;
+                    return scaleCorrectedQuantity + " " + correctQuantityAndMeasurement;
                 }
                 else if (quantity == 1 && scale == 0.5)
                 {
                     correctQuantityAndMeasurement = "Teaspoon(s)";
                     return (quantity * 2.00) + " " + correctQuantityAndMeasurement;
                 }
+                else if (quantity == 0.5 && scale == 0.5)
+                {
+                    correctQuantityAndMeasurement = "Teaspoon(s)";
+                    return (quantity * 1.00) + " " + correctQuantityAndMeasurement;
+                }
                 else
                 {
                     return correctQuantityAndMeasurement;
                 }
             }
-            if (unitOfMeasurement.Equals("Kilograms(s)"))
+            // If originally entered measurements was kilograms:
+            else if (unitOfMeasurement.Equals("Kilograms(s)"))
             {
                 if (scale == 0.5 && quantity == 1)
                 {
@@ -145,9 +166,10 @@ namespace PROG6221_POE
                 }
                 else
                 {
-                   return correctQuantityAndMeasurement;
+                    return correctQuantityAndMeasurement;
                 }
             }
+            // If originally entered measurements was grams:
             else if (unitOfMeasurement.Equals("Gram(s)"))
             {
                 if (scaleCorrectedQuantity >= 1000)
@@ -166,9 +188,9 @@ namespace PROG6221_POE
                 return correctQuantityAndMeasurement;
             }
         }
-        }
-
-//----------------------------------------------------------------------------\\
     }
+
+    //----------------------------------------------------------------------------\\
+}
 
 
