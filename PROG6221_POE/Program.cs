@@ -151,16 +151,18 @@ class Program
         int numSteps;
         int checkedUserInput;
 
+        // Check if there is already a recipe in the storage
         if (recipeList.Count() > 0)
         {
-            Console.WriteLine("A Recipe Is Already Present In Storage. " +
-                              "To Add A New Recipe, Storage Must Be Cleared");
+            // Print a message and prompt the user to continue or not
+            Console.WriteLine("A Recipe Is Already Present In Storage. To Add A New Recipe, Storage Must Be Cleared");
             do
             {
                 Console.Write("Would You Like To Continue (Y/N): ");
                 userInput = Console.ReadLine().ToLower();
                 checkedUserInput = errorControl.CheckYesOrNo(userInput);
 
+                // Depending on the user's input, perform an action
                 switch (checkedUserInput)
                 {
                     case 1:
@@ -173,8 +175,10 @@ class Program
             } while (checkedUserInput == 0);
         }
 
+        // Declare a new recipe object
         Recipe newRecipe;
 
+        // Prompt the user to enter the name of the new recipe and check if it's not null
         do
         {
             PrintTitle();
@@ -182,6 +186,7 @@ class Program
             recipeName = Console.ReadLine();
         } while (errorControl.CheckForNull(recipeName) == false);
 
+        // Prompt the user to enter the number of ingredients and check if it's a number
         do
         {
             PrintTitle();
@@ -191,16 +196,17 @@ class Program
             userInput = Console.ReadLine();
         } while (errorControl.CheckForNumber(userInput) == false);
 
-
+        // Convert the user input to an integer
         numIngredients = int.Parse(userInput);
 
+        // If the number of ingredients is 0, print an error message and abort creating the recipe
         if (numIngredients == 0)
         {
-            animation.PrintMessage("negative", "No Ingredients To Be Added. " +
-                                   "Create Recipe Aborted"); //Might need another clear line
+            animation.PrintMessage("negative", "No Ingredients To Be Added. Create Recipe Aborted");
             return;
         }
 
+        // Prompt the user to enter the number of steps and check if it's a number
         do
         {
             PrintTitle();
@@ -210,20 +216,25 @@ class Program
             userInput = Console.ReadLine();
         } while (errorControl.CheckForNumber(userInput) == false);
 
+        // Convert the user input to an integer
         numSteps = int.Parse(userInput);
 
+        // If the number of steps is 0, print an error message and abort creating the recipe
         if (numSteps == 0)
         {
             animation.PrintMessage("negative", "No Steps To Be Added. Create Recipe Aborted");
             return;
         }
 
+        // Create a new recipe object with the given name, number of ingredients and steps
         newRecipe = new Recipe(recipeName, numIngredients, numSteps);
 
-        string ingrerdientName;
+        // Declare and initialize the variables for the ingredients
+        string ingredientName;
         double ingredientQuantity = 0;
         string ingredientUnitOfMeasurement = "";
 
+        // Loop through the ingredients and prompt the user to enter their name, unit of measurement and quantity
         for (int ingredient = 0; ingredient < numIngredients; ingredient++)
         {
             do
@@ -231,14 +242,14 @@ class Program
                 PrintTitle();
                 Console.WriteLine("Recipe: " + recipeName);
                 Console.Write("\nPlease Enter The Name Of The Ingrediant: ");
-                ingrerdientName = Console.ReadLine();
-            } while (errorControl.CheckForNull(ingrerdientName) == false);
+                ingredientName = Console.ReadLine();
+            } while (errorControl.CheckForNull(ingredientName) == false);
 
             Console.WriteLine();
 
 
             Console.Write("Please Select The Unit Of Measurement For \""
-                      + ingrerdientName + "\": ");
+                      + ingredientName + "\": ");
             Console.WriteLine("\n1) Teaspoon(s)" +
                               "\n2) Tablespoon(s)" +
                               "\n3) Cup(s)" +
@@ -259,13 +270,13 @@ class Program
             do
             {
                 Console.Write("Please Enter The Quantity For \""
-                              + ingrerdientName + "\" (x.xx): ");
+                              + ingredientName + "\" (x.xx): ");
                 userInput = Console.ReadLine();
             } while (errorControl.CheckForNumber(userInput) == false);
 
             ingredientQuantity = double.Parse(userInput);
 
-            newRecipe.addIngredient(ingrerdientName, ingredientUnitOfMeasurement,
+            newRecipe.addIngredient(ingredientName, ingredientUnitOfMeasurement,
                                     ingredientQuantity);
 
         }
@@ -324,12 +335,14 @@ class Program
             recipeNum++;
         }
 
+        Console.WriteLine();
         // Get the user's recipe selection.
         do
         {
-            Console.Write("\nEnter Your Numeric Selection: ");
+            Console.Write("Enter Your Numeric Selection: ");
             userInput = Console.ReadLine();
-        } while (errorControl.CheckForNumber(userInput) == false);
+        } while (errorControl.CheckForNumber(userInput) == false
+                 || errorControl.CheckForRecipe(userInput, recipeList.Count) == false);
 
         recipeIndex = int.Parse(userInput) - 1;
 

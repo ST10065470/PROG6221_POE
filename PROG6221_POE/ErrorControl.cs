@@ -165,6 +165,21 @@ namespace PROG6221_POE
                 return true;
             }
         }
+
+        public Boolean CheckForRecipe(string recipeNum, int numRecipes)
+        {
+            int recipeIndex = int.Parse(recipeNum);
+
+            if (recipeIndex <= numRecipes)
+            {
+                return true;
+            }
+            else
+            {
+                IncorrectEntryPrompt();
+                return false;
+            }
+        }
     }
 }
 
