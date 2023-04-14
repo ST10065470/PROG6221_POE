@@ -7,7 +7,7 @@ namespace PROG6221_POE
         private string[] stepsList;
         private string recipeName;
         //----------------------------------------------------------------------------\\
-
+        //Getters And Setters
         public string RecipeName { get => recipeName; set => recipeName = value; }
         public Ingredient[] IngredientsList { get => ingredientsList; set => ingredientsList = value; }
         public string[] StepsList { get => stepsList; set => stepsList = value; }
@@ -16,10 +16,16 @@ namespace PROG6221_POE
 
         public Recipe(string recipeName, int numIngredients, int numSteps)
         {
+            // Create a new array of Ingredient objects with length numIngredients, and assign it to the IngredientsList field of the Recipe object
             IngredientsList = new Ingredient[numIngredients];
+
+            // Create a new array of strings with length numSteps, and assign it to the StepsList field of the Recipe object
             StepsList = new string[numSteps];
+
+            // Assign the value of recipeName to the RecipeName field of the Recipe object
             this.RecipeName = recipeName;
         }
+
 
         //----------------------------------------------------------------------------\\
 
@@ -70,30 +76,41 @@ namespace PROG6221_POE
 
         //----------------------------------------------------------------------------\\
 
+        // Method to display a recipe with ingredients and steps
         public string displayRecipe(double scale)
         {
+            // Initialize strings to store the ingredients and steps
             string ingredientsToString = "Ingredients:";
             string stepsToString = "Steps:";
-            string recipe;
+
+            // Initialize a counter for the steps
             int stepCount = 1;
 
+            // Iterate over the list of ingredients
             foreach (Ingredient ingredient in IngredientsList)
             {
-
-                ingredientsToString += "\n" + correctQuantityAndMeasurement(scale
-                    , ingredient.Quantity, ingredient.UnitOfMeasurement) + " "
-                    + ingredient.Name;
+                // Append the correct quantity and measurement for the scaled ingredient to the string
+                ingredientsToString += "\n" + correctQuantityAndMeasurement(scale, ingredient.Quantity, ingredient.UnitOfMeasurement)
+                    + " " + ingredient.Name;
             }
 
+            // Iterate over the list of steps
             foreach (string step in StepsList)
             {
+                // Append the step number and text to the string
                 stepsToString += "\n" + stepCount + ". " + stepsList[stepCount - 1];
+
+                // Increment the step counter
                 stepCount++;
             }
 
-            recipe = ingredientsToString + "\n\n" + stepsToString;
+            // Combine the strings for ingredients and steps
+            string recipe = ingredientsToString + "\n\n" + stepsToString;
+
+            // Return the combined recipe string
             return recipe;
         }
+
 
         //----------------------------------------------------------------------------\\
         /* This method takes in a scale factor, a quantity value,

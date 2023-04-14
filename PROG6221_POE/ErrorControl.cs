@@ -3,11 +3,11 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace PROG6221_POE
 {
-	public class ErrorControl
-	{
-		public ErrorControl()
-		{
-		}
+    public class ErrorControl
+    {
+        public ErrorControl()
+        {
+        }
 
         /*
         Displays an error message prompting the user to try again after entering invalid input.
@@ -50,136 +50,153 @@ namespace PROG6221_POE
             Thread.Sleep(400);
         }
 
+        // Check if the user's answer contains "y" or "n"
         public int CheckYesOrNo(string answer)
         {
-            if (answer.ToLower().Contains("y"))
+            if (answer.ToLower().Contains("y")) // if answer contains "y"
             {
-                return 1;
+                return 1; // return 1
             }
-            else if (answer.ToLower().Contains("n"))
+            else if (answer.ToLower().Contains("n")) // else if answer contains "n"
             {
-                return 2;
+                return 2; // return 2
             }
-            else
+            else // else
             {
-                IncorrectEntryPrompt();
-                return 0;
+                IncorrectEntryPrompt(); // call IncorrectEntryPrompt method
+                return 0; // return 0
             }
         }
 
+        // Check if the user's input is empty
         public Boolean CheckForNull(string userInput)
         {
-            if (userInput.Equals(""))
+            if (userInput.Equals("")) // if user input is empty
             {
-                IncorrectEntryPrompt();
-                return false;
+                IncorrectEntryPrompt(); // call IncorrectEntryPrompt method
+                return false; // return false
             }
-            else
+            else // else
             {
-                return true;
+                return true; // return true
             }
         }
 
+        // Check if the user's input is a number
         public Boolean CheckForNumber(string userInput)
         {
-
             try
             {
-                double.Parse(userInput);
-                return true;
+                double.Parse(userInput); // try to parse user input as a double
+                return true; // return true if successful
             }
-            catch (Exception ex)
+            catch (Exception ex) // catch any exception
             {
-                IncorrectEntryPrompt();
-                return false;
+                IncorrectEntryPrompt(); // call IncorrectEntryPrompt method
+                return false; // return false
             }
         }
 
+        // Check if the user's input is a valid unit of measurement
         public string CheckSelectUnit(string userInput)
         {
-            if (userInput.Equals("1") || userInput.Equals("teaspoon") || userInput.Equals("teaspoon(s)"))
+            if (userInput.Equals("1") || userInput.Equals("teaspoon") || userInput.Equals("teaspoon(s)")) // if user input is "1", "teaspoon", or "teaspoon(s)"
             {
-                return "Teaspoon(s)";
+                return "Teaspoon(s)"; // return "Teaspoon(s)"
             }
-            else if (userInput.Equals("2") || userInput.Equals("tablespoon") || userInput.Equals("tablespoon(s)"))
+            else if (userInput.Equals("2") || userInput.Equals("tablespoon") || userInput.Equals("tablespoon(s)")) // else if user input is "2", "tablespoon", or "tablespoon(s)"
             {
-                return "Tablespoon(s)";
+                return "Tablespoon(s)"; // return "Tablespoon(s)"
             }
-            else if (userInput.Equals("3") || userInput.Equals("cup") || userInput.Equals("cup(s)"))
+            else if (userInput.Equals("3") || userInput.Equals("cup") || userInput.Equals("cup(s)")) // else if user input is "3", "cup", or "cup(s)"
             {
-                return "Cup(s)";
+                return "Cup(s)"; // return "Cup(s)"
             }
-            else if (userInput.Equals("4") || userInput.Equals("gram") || userInput.Equals("gram(s)"))
+            else if (userInput.Equals("4") || userInput.Equals("gram") || userInput.Equals("gram(s)")) // else if user input is "4", "gram", or "gram(s)"
             {
-                return "Gram(s)";
+                return "Gram(s)"; // return "Gram(s)"
             }
-            else if (userInput.Equals("5") || userInput.Equals("kilogram") || userInput.Equals("kilogram(s)"))
+            else if (userInput.Equals("5") || userInput.Equals("kilogram") || userInput.Equals("kilogram(s)")) // else if user input is "5", "kilogram", or "kilogram(s)"
             {
-                return "Kilogram(s)";
+                return "Kilogram(s)"; // return "Kilogram(s)"
             }
-            else
+            else // else
             {
-                IncorrectEntryPrompt();
-                return "Invalid";
+                IncorrectEntryPrompt(); // call IncorrectEntryPrompt method
+                return "Invalid"; // return "Invalid"
             }
         }
 
         public double CheckSetScale(string userInput)
         {
+            // Check if the user input contains '1' or is equal to 'default'
             if (userInput.Contains("1") || userInput.Equals("default"))
             {
                 return 1;
             }
+            // Check if the user input contains '2' or is equal to 'double'
             else if (userInput.Contains("2") || userInput.Equals("double"))
             {
                 return 2;
             }
+            // Check if the user input contains '3' or is equal to 'triple'
             else if (userInput.Contains("3") || userInput.Equals("triple"))
             {
                 return 3;
             }
+            // Check if the user input contains '4', is equal to 'half', or is equal to '0.5'
             else if (userInput.Contains("4") || userInput.Equals("half") || userInput.Equals("0.5"))
             {
                 return 0.5;
             }
             else
             {
+                // Prompt the user that their entry is incorrect
                 IncorrectEntryPrompt();
+                // Return 0 as a default value
                 return 0;
             }
         }
 
         public Boolean CheckSetScaleMenuChoice(string userInput)
         {
+            // Check if the user input is '1) reset scale'
             if ("1) reset scale".Contains(userInput))
             {
                 return true;
             }
+            // Check if the user input is '2) Return To Menu'
             else if ("2) Return To Menu".Contains(userInput))
             {
                 return false;
             }
             else
             {
+                // Prompt the user that their entry is incorrect
                 IncorrectEntryPrompt();
+                // Return true as a default value
                 return true;
             }
         }
 
         public Boolean CheckForRecipe(string recipeNum, int numRecipes)
         {
+            // Parse the recipe number as an integer
             int recipeIndex = int.Parse(recipeNum);
 
+            // Check if the recipe number is less than or equal to the number of recipes available
             if (recipeIndex <= numRecipes)
             {
                 return true;
             }
             else
             {
+                // Prompt the user that their entry is incorrect
                 IncorrectEntryPrompt();
+                // Return false as a default value
                 return false;
             }
         }
+
     }
 }
-
