@@ -143,7 +143,6 @@ namespace PROG6221_POE
 
 
         //----------------------------------------------------------------------------\\
-
         public void CreateRecipe()
         {
             string userInput;
@@ -156,7 +155,7 @@ namespace PROG6221_POE
             if (recipeList.Count() > 0)
             {
                 // Print a message and prompt the user to continue or not
-                Console.WriteLine("A Recipe Is Already Present In Storage. To Add A New Recipe, Storage Must Be Cleared");
+                Console.WriteLine("A Recipe Is Already Present In Storage. To Add A New Recipe, Storage Must Be Cleared\n");
                 do
                 {
                     Console.Write("Would You Like To Continue (Y/N): ");
@@ -170,6 +169,8 @@ namespace PROG6221_POE
                             recipeList.Clear();
                             animation.PrintMessage("positive", "Recipe Deleted");
                             break;
+                        case 2:
+                            return;
                         default:
                             break;
                     }

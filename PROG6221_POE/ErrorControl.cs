@@ -141,61 +141,65 @@ namespace PROG6221_POE
                     return "Invalid"; // return "Invalid"
             }
 
-            if (userInput.Equals("1") || userInput.Equals("teaspoon") || userInput.Equals("teaspoon(s)")) // if user input is "1", "teaspoon", or "teaspoon(s)"
+            switch (userInput)
             {
-                return "Teaspoon(s)"; // return "Teaspoon(s)"
-            }
-            else if (userInput.Equals("2") || userInput.Equals("tablespoon") || userInput.Equals("tablespoon(s)")) // else if user input is "2", "tablespoon", or "tablespoon(s)"
-            {
-                return "Tablespoon(s)"; // return "Tablespoon(s)"
-            }
-            else if (userInput.Equals("3") || userInput.Equals("cup") || userInput.Equals("cup(s)")) // else if user input is "3", "cup", or "cup(s)"
-            {
-                return "Cup(s)"; // return "Cup(s)"
-            }
-            else if (userInput.Equals("4") || userInput.Equals("gram") || userInput.Equals("gram(s)")) // else if user input is "4", "gram", or "gram(s)"
-            {
-                return "Gram(s)"; // return "Gram(s)"
-            }
-            else if (userInput.Equals("5") || userInput.Equals("kilogram") || userInput.Equals("kilogram(s)")) // else if user input is "5", "kilogram", or "kilogram(s)"
-            {
-                return "Kilogram(s)"; // return "Kilogram(s)"
-            }
-            else // else
-            {
-                IncorrectEntryPrompt(); // call IncorrectEntryPrompt method
-                return "Invalid"; // return "Invalid"
+                // if user input is "1", "teaspoon", or "teaspoon(s)"
+                case "1":
+                case "teaspoon":
+                case "teaspoon(s)":
+                    return "Teaspoon(s)"; // return "Teaspoon(s)"
+                //if user input is "2", "tablespoon", or "tablespoon(s)"
+                case "2":
+                case "tablespoon":
+                case "tablespoon(s)":
+                    return "Tablespoon(s)"; // return "Tablespoon(s)"
+                // if user input is "3", "cup", or "cup(s)"
+                case "3":
+                case "cup":
+                case "cup(s)":
+                    return "Cup(s)"; // return "Cup(s)"
+                // else if user input is "4", "gram", or "gram(s)"
+                case "4":
+                case "gram":
+                case "gram(s)":
+                    return "Gram(s)"; // return "Gram(s)"
+                //if if user input is "5", "kilogram", or "kilogram(s)"
+                case "5":
+                case "kilogram":
+                case "kilograms":
+                    return "Kilogram(s)"; // return "Kilogram(s)"
+                default:
+                    IncorrectEntryPrompt(); // call IncorrectEntryPrompt method
+                    return "Invalid"; // return "Invalid"
             }
         }
 
         public double CheckSetScale(string userInput)
         {
-            // Check if the user input contains '1' or is equal to 'default'
-            if (userInput.Contains("1") || userInput.Equals("default"))
-            {
-                return 1;
-            }
-            // Check if the user input contains '2' or is equal to 'double'
-            else if (userInput.Contains("2") || userInput.Equals("double"))
-            {
-                return 2;
-            }
-            // Check if the user input contains '3' or is equal to 'triple'
-            else if (userInput.Contains("3") || userInput.Equals("triple"))
-            {
-                return 3;
-            }
-            // Check if the user input contains '4', is equal to 'half', or is equal to '0.5'
-            else if (userInput.Contains("4") || userInput.Equals("half") || userInput.Equals("0.5"))
-            {
-                return 0.5;
-            }
-            else
-            {
-                // Prompt the user that their entry is incorrect
-                IncorrectEntryPrompt();
-                // Return 0 as a default value
-                return 0;
+            switch (userInput) 
+            { 
+                // If the user input contains '1' or is equal to 'default'
+                case "1":
+                case "default":
+                    return 1;
+                // If the user input contains '2' or is equal to 'double'
+                case "2":
+                case "double":
+                    return 2;
+                // If the user input contains '3' or is equal to 'triple'
+                case "3":
+                case "triple":
+                    return 3;
+                // If the user input contains '4', is equal to 'half', or is equal to '0.5'
+                case "4":
+                case "half":
+                case "0.5":
+                    return 0.5;
+                default:
+                    // Prompt the user that their entry is incorrect
+                    IncorrectEntryPrompt();
+                    // Return 0 as a default value
+                    return 0;
             }
         }
 
