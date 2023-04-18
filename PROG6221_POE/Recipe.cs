@@ -1,4 +1,6 @@
 ﻿using System;
+using static System.Formats.Asn1.AsnWriter;
+
 namespace PROG6221_POE
 {
     public class Recipe
@@ -77,7 +79,7 @@ namespace PROG6221_POE
         //----------------------------------------------------------------------------\\
 
         // Method to display a recipe with ingredients and steps
-        public string displayRecipe(double scale)
+        public string DisplayRecipe(double scale)
         {
             // Initialize strings to store the ingredients and steps
             string ingredientsToString = "Ingredients:";
@@ -90,7 +92,7 @@ namespace PROG6221_POE
             foreach (Ingredient ingredient in IngredientsList)
             {
                 // Append the correct quantity and measurement for the scaled ingredient to the string
-                ingredientsToString += "\n" + correctQuantityAndMeasurement(scale, ingredient.Quantity, ingredient.UnitOfMeasurement)
+                ingredientsToString += "\n" + CorrectQuantityAndMeasurement(scale, ingredient.Quantity, ingredient.UnitOfMeasurement)
                     + " " + ingredient.Name;
             }
 
@@ -116,84 +118,61 @@ namespace PROG6221_POE
         /* This method takes in a scale factor, a quantity value,
         and a string representing the unit of measurement for that value
         and returns the correct unit of measurement based on the quantity entered*/
-        public string correctQuantityAndMeasurement(double scale, double quantity,
+        public string CorrectQuantityAndMeasurement(double scale, double quantity,
                                                string unitOfMeasurement)
         {
             double scaleCorrectedQuantity = (quantity * scale); //The scale corrected quantity
-            string correctQuantityAndMeasurement = scaleCorrectedQuantity + " " + unitOfMeasurement; //A string which stores the quantity and unit of measurement
+            string correctQuantityAndMeasurement = scaleCorrectedQuantity + " "
+                + unitOfMeasurement; //A string which stores the quantity and unit of measurement
+
+            if (unitOfMeasurement.Contains('/'))
+            {
+                return IfCustomScale(unitOfMeasurement, correctQuantityAndMeasurement, scaleCorrectedQuantity);
+            }
 
             // If originally entered measurements was teaspoons:
-            if (unitOfMeasurement.Equals("Teaspoon(s)"))
+            else
             {
-                if ((scaleCorrectedQuantity % 4) == 0)
+                switch (unitOfMeasurement)
                 {
-                    scaleCorrectedQuantity = scaleCorrectedQuantity / 4.00;
-                    correctQuantityAndMeasurement = scaleCorrectedQuantity + " Tablespoon(s)";
-
-                    if (scaleCorrectedQuantity % 16 == 0)
-                    {
-                        scaleCorrectedQuantity = scaleCorrectedQuantity / 16.00;
-                        correctQuantityAndMeasurement = scaleCorrectedQuantity + " Cup(s)";
-                        return correctQuantityAndMeasurement;
-                    }
-                    else
-                    {
-                        return correctQuantityAndMeasurement;
-                    }
-                }
-                else
-                {
-                    return correctQuantityAndMeasurement;
-                }
-
-            }
-            // If originally entered measurements was tablespoons:
-            else if (unitOfMeasurement.Equals("Tablespoon(s)"))
-            {
-                if ((scaleCorrectedQuantity % 16) == 0)
-                {
-                    correctQuantityAndMeasurement = "Cup(s)";
-                    scaleCorrectedQuantity = scaleCorrectedQuantity / 16.00;
-
-                    return scaleCorrectedQuantity + " " + correctQuantityAndMeasurement;
-                }
-                else if (quantity == 1 && scale == 0.5)
-                {
-                    correctQuantityAndMeasurement = "Teaspoon(s)";
-                    return (quantity * 2.00) + " " + correctQuantityAndMeasurement;
-                }
-                else if (quantity == 0.5 && scale == 0.5)
-                {
-                    correctQuantityAndMeasurement = "Teaspoon(s)";
-                    return (quantity * 1.00) + " " + correctQuantityAndMeasurement;
-                }
-                else
-                {
-                    return correctQuantityAndMeasurement;
+                    case "Teaspoon(s)":
+                        return IfTeaspoons(scaleCorrectedQuantity);
+                    case "Tablespoon(s)":
+                        return IfTableSpoons(scaleCorrectedQuantity);
+                    case "Cups":
+                        return IfCups(scaleCorrectedQuantity);
+                    case "Kilograms(s)":
+                        return IfKilograms(scaleCorrectedQuantity);
+                    case "Gram(s)":
+                        return IfGrams(scaleCorrectedQuantity);
+                    default:
+                        return null;
                 }
             }
-            // If originally entered measurements was kilograms:
-            else if (unitOfMeasurement.Equals("Kilograms(s)"))
+        }
+
+        public string IfCustomScale(string unitOfMeasurement, string correctQuantityAndMeasurement,
+                                    double scaleCorrectedQuantity)
+        {
+            string[] parts = unitOfMeasurement.Split('/');
+
+            correctQuantityAndMeasurement = scaleCorrectedQuantity + " "
+                + (scaleCorrectedQuantity == 1 ? parts[0] : parts[1]) + " Of";
+
+            return correctQuantityAndMeasurement;
+        }
+
+        public string IfTeaspoons(double scaleCorrectedQuantity)
+        {
+            if (scaleCorrectedQuantity % 4 == 0)
             {
-                if (scale == 0.5 && quantity == 1)
+                scaleCorrectedQuantity /= 4.0;
+                string correctQuantityAndMeasurement = IfTableSpoons(scaleCorrectedQuantity);
+
+                if (scaleCorrectedQuantity >= 16)
                 {
-                    // Convert 1 kilogram to 500 grams
-                    correctQuantityAndMeasurement = "500 Gram(s)";
-                    return correctQuantityAndMeasurement;
-                }
-                else
-                {
-                    return correctQuantityAndMeasurement;
-                }
-            }
-            // If originally entered measurements was grams:
-            else if (unitOfMeasurement.Equals("Gram(s)"))
-            {
-                if (scaleCorrectedQuantity >= 1000)
-                {
-                    // Convert grams to kilograms
-                    correctQuantityAndMeasurement = (scaleCorrectedQuantity / 1000.00) + " Kilogram(s)";
-                    return correctQuantityAndMeasurement;
+                    scaleCorrectedQuantity /= 16;
+                    return IfCups(scaleCorrectedQuantity);
                 }
                 else
                 {
@@ -202,6 +181,66 @@ namespace PROG6221_POE
             }
             else
             {
+                string unitOfMeasurement = (scaleCorrectedQuantity > 1) ? "Teaspoons" : "Teaspoon";
+                string correctQuantityAndMeasurement = scaleCorrectedQuantity + " " + unitOfMeasurement + " Of";
+                return correctQuantityAndMeasurement;
+            }
+        }
+
+        public string IfTableSpoons(double scaleCorrectedQuantity)
+        {
+            if (scaleCorrectedQuantity >= 16)
+            {
+                scaleCorrectedQuantity /= 16;
+
+                return IfCups(scaleCorrectedQuantity);
+            }
+            else if (scaleCorrectedQuantity < 1)
+            {
+                scaleCorrectedQuantity *= 4;
+                return IfTeaspoons(scaleCorrectedQuantity);
+            }
+            else
+            {
+                string unitOfMeasurement = (scaleCorrectedQuantity > 1) ? "Tablespoons" : "Tablespoon";
+                string correctQuantityAndMeasurement = scaleCorrectedQuantity + " " + unitOfMeasurement + " Of";
+                return correctQuantityAndMeasurement;
+            }
+        }
+
+        public string IfCups(double scaleCorrectedQuantity)
+        {
+            string unitOfMeasurement = (scaleCorrectedQuantity > 1) ? "Cups" : "Cup";
+            string correctQuantityAndMeasurement = scaleCorrectedQuantity + " " + unitOfMeasurement + " Of";
+            return correctQuantityAndMeasurement;
+        }
+
+        public string IfKilograms(double scaleCorrectedQuantity)
+        {
+            if (scaleCorrectedQuantity < 1)
+            {
+                scaleCorrectedQuantity *= 1000;
+                return IfGrams(scaleCorrectedQuantity);
+            }
+            else
+            {
+                string unitOfMeasurement = (scaleCorrectedQuantity > 1) ? "Kilograms" : "Kilogram";
+                string correctQuantityAndMeasurement = scaleCorrectedQuantity + " " + unitOfMeasurement + " Of";
+                return correctQuantityAndMeasurement;
+            }
+        }
+
+        public string IfGrams(double scaleCorrectedQuantity)
+        {
+            if (scaleCorrectedQuantity >= 1000)
+            {
+                scaleCorrectedQuantity /= 1000;
+                return IfKilograms(scaleCorrectedQuantity);
+            }
+            else
+            {
+                string unitOfMeasurement = (scaleCorrectedQuantity > 1) ? "Grams" : "Gram";
+                string correctQuantityAndMeasurement = scaleCorrectedQuantity + " " + unitOfMeasurement + " Of";
                 return correctQuantityAndMeasurement;
             }
         }

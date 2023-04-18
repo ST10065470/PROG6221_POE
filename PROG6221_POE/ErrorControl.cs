@@ -83,12 +83,20 @@ namespace PROG6221_POE
         }
 
         // Check if the user's input is a number
-        public Boolean CheckForNumber(string userInput)
+        public Boolean CheckForPositiveNumber(string userInput)
         {
             try
             {
-                double.Parse(userInput); // try to parse user input as a double
-                return true; // return true if successful
+                if (double.Parse(userInput) >= 0) // try to parse user input as a double and check if the number is greater than 0
+                {
+                    return true; // return true if successful
+                }
+                else
+                {
+                    IncorrectEntryPrompt(); // call IncorrectEntryPrompt method
+                    return false; // return false
+                }
+                
             }
             catch (Exception ex) // catch any exception
             {
@@ -100,6 +108,39 @@ namespace PROG6221_POE
         // Check if the user's input is a valid unit of measurement
         public string CheckSelectUnit(string userInput)
         {
+            switch (userInput)
+            {
+                case "1":
+                case "teaspoon":
+                case "teaspoon(s)":
+                    return "Teaspoon(s)";
+                case "2":
+                case "tablespoon":
+                case "tablespoon(s)":
+                    return "Tablespoon(s)";
+                case "3":
+                case "cup":
+                case "cup(s)":
+                    return "Cups(s)";
+                case "4":
+                case "gram":
+                case "gram(s)":
+                    return "Gram(s)";
+
+                case "5":
+                case "kilogram":
+                case "kilogram(s)":
+                    return "Kilogram(s)";
+                case "6":
+                case "custom unit":
+                case "custom":
+                    return "Custom Unit";
+
+                default:
+                    IncorrectEntryPrompt(); // call IncorrectEntryPrompt method
+                    return "Invalid"; // return "Invalid"
+            }
+
             if (userInput.Equals("1") || userInput.Equals("teaspoon") || userInput.Equals("teaspoon(s)")) // if user input is "1", "teaspoon", or "teaspoon(s)"
             {
                 return "Teaspoon(s)"; // return "Teaspoon(s)"
