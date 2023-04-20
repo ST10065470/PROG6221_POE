@@ -15,6 +15,7 @@ namespace PROG6221_POE
         static void Main(string[] args)
         {
 
+            //launch program from interfacing class
             Interfacing.run();
 
         }//end main method
