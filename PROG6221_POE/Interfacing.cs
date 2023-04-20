@@ -9,7 +9,7 @@ using static System.Console;
 
 namespace PROG6221_POE
 {
-    internal class Ingredient
+    internal class Interfacing
     {
 
 
