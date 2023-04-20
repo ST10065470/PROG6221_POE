@@ -15,7 +15,7 @@ namespace PROG6221_POE
         static void Main(string[] args)
         {
 
-          
+            Interfacing.run();
 
         }//end main method
     }
