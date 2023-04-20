@@ -9,10 +9,18 @@ using static System.Console;
 
 namespace PROG6221_POE
 {
-    internal class Interfacing
+    class Interfacing  
     {
 
+        public static void run()
+        {
 
+
+
+        }//end public run method
+
+
+        pro
 
     }
 }

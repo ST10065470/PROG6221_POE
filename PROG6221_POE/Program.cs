@@ -9,13 +9,13 @@ using static System.Console;
 
 namespace PROG6221_POE
 {
-    internal class Program
+    class Program
     {
 
         static void Main(string[] args)
         {
 
-            
+          
 
         }//end main method
     }
