@@ -13,12 +13,13 @@ namespace PROG6221_POE
         //----------------------------------------------------------------------------\\
         static void Main(string[] args)
         {
+            // Create an instance of the Program class named "run" to avoid using all static methods.
             Program run = new Program();
+            // Call the Menu method of the run instance.
             run.Menu();
         }
 
         //----------------------------------------------------------------------------\\
-
         /* This method clears the console, resets the console colours to their defaults,
         and prints the programme title and a separator. */
         public void PrintTitle()
@@ -38,7 +39,7 @@ namespace PROG6221_POE
 
 
         //----------------------------------------------------------------------------\\
-
+        //This method displays a main menu and calls the appropriate method based on user selection
         public void Menu()
         {
             int menuSelection = 0;
@@ -94,7 +95,6 @@ namespace PROG6221_POE
         }
 
         //----------------------------------------------------------------------------\\
-
         /*
         Deletes a recipe from the list of saved recipes, after prompting the user for confirmation.
         If there are no saved recipes to delete, an error message is displayed and the method exits.
@@ -143,13 +143,16 @@ namespace PROG6221_POE
 
 
         //----------------------------------------------------------------------------\\
+        /*This method takes the user through the process of creating a new 
+         * recipe, choosing its' unit of measurement and deleting any already existing recipes */
         public void CreateRecipe()
         {
-            string userInput;
-            string recipeName;
-            int numIngredients;
-            int numSteps;
-            int checkedUserInput;
+            //Declaring variables
+            string userInput; //Used to take user input from the console
+            string recipeName; //Used to store the user inputted recipe name
+            int numIngredients; //Used to store the user inputted number of ingredients
+            int numSteps; //Used to store the user inputted number of steps
+            int checkedUserInput; //Used to store result of a error control check
 
             // Check if there is already a recipe in the storage
             if (recipeList.Count() > 0)
@@ -160,22 +163,22 @@ namespace PROG6221_POE
                 {
                     Console.Write("Would You Like To Continue (Y/N): ");
                     userInput = Console.ReadLine().ToLower();
-                    checkedUserInput = errorControl.CheckYesOrNo(userInput);
+                    checkedUserInput = errorControl.CheckYesOrNo(userInput); //Checking if the user input is valid
 
-                    // Depending on the user's input, perform an action
+                    // Depending on the user's input result, perform an action
                     switch (checkedUserInput)
                     {
-                        case 1:
+                        case 1: //1 = yes
                             recipeList.Clear();
                             animation.PrintMessage("positive", "Recipe Deleted");
                             break;
-                        case 2:
+                        case 2: //2 = no
                             return;
-                        default:
+                        default: // 0 = Invalid Input
                             break;
                     }
 
-                } while (checkedUserInput == 0);
+                } while (checkedUserInput == 0); //Repeat while invalid input
             }
 
             // Declare a new recipe object
@@ -296,41 +299,42 @@ namespace PROG6221_POE
 
             }
 
-            for (int step = 0; step < numSteps; step++)
+            for (int step = 0; step < numSteps; step++) // Loop from step 0 to step (numSteps - 1)
             {
-                string stepInfo;
+                string stepInfo; // Declare a string variable to hold the step information
 
-                PrintTitle();
-                Console.WriteLine("Recipe: " + newRecipe.RecipeName);
-                Console.WriteLine();
+                PrintTitle(); // Call the PrintTitle method to display the program title
+                Console.WriteLine("Recipe: " + newRecipe.RecipeName); // Display the recipe name
+                Console.WriteLine(); // Add a blank line for spacing
+
+                // Prompt the user to enter step information until a non-null value is entered
                 do
                 {
-                    Console.Write("Please Enter Step Number " + (step + 1) + ": ");
-                    stepInfo = Console.ReadLine();
+                    Console.Write("Please Enter Step Number " + (step + 1) + ": "); // Display a message with the current step number
+                    stepInfo = Console.ReadLine(); // Read the user input and store it in the stepInfo variable
                 } while (errorControl.CheckForNull(stepInfo) == false);
 
-                newRecipe.addStep(stepInfo);
+                newRecipe.addStep(stepInfo); // Call the addStep method of the newRecipe object to add the step to the recipe
             }
 
+            //Add the recipe to the recipeList
             recipeList.Add(newRecipe);
             animation.PrintMessage("positive", "Recipe Saved");
         }
 
-
-
         //----------------------------------------------------------------------------\\
-        // This method displays a selected recipe with ingredients being scaled
+        /* This method displays a list of saved recipes, prompts the user to 
+         * select one and a scale, and displays the selected recipe with the chosen scale */
         public void DisplayRecipeAction()
         {
             // Print title of the application.
             PrintTitle();
 
             // Initialise variables for recipe selection and scale.
-            int recipeNum = 1;
-            int recipeIndex = 0;
-            double recipeScale = 0;
-            Boolean confirmInputCorrect = false;
-            string userInput;
+            int recipeNum = 1; // Counter for displaying recipe number
+            int recipeIndex = 0; // Index of the selected recipe in the recipeList
+            double recipeScale = 0; // Scale factor of the selected recipe
+            string userInput; // Variable for storing user's input
 
             // Check if there are any recipes saved.
             if (recipeList.Count == 0)
@@ -346,21 +350,23 @@ namespace PROG6221_POE
             // Display the list of recipes.
             foreach (Recipe recipe in recipeList)
             {
-                Console.WriteLine(recipeNum + ") " + recipe.RecipeName);
-                recipeNum++;
+                Console.WriteLine(recipeNum + ") " + recipe.RecipeName); // Display the recipe number and name
+                recipeNum++; // Increment the recipe number counter
             }
 
             Console.WriteLine();
+
             // Get the user's recipe selection.
             do
             {
                 Console.Write("Enter Your Numeric Selection: ");
-                userInput = Console.ReadLine();
+                userInput = Console.ReadLine(); // Read user's input from the console
             } while (errorControl.CheckForPositiveNumber(userInput) == false
-                     || errorControl.CheckForRecipe(userInput, recipeList.Count) == false);
+                     || errorControl.CheckForRecipe(userInput, recipeList.Count) == false); // Check if the input is valid
 
-            recipeIndex = int.Parse(userInput) - 1;
+            recipeIndex = int.Parse(userInput) - 1; // Convert user's input to integer and set it as the recipe index
 
+            // Loop for setting the scale of the selected recipe
             do
             {
                 PrintTitle();
@@ -372,6 +378,7 @@ namespace PROG6221_POE
                                   "\n4) Half (0.5)" +
                                   "\n");
 
+                // Loop for getting the user's scale selection
                 do
                 {
                     // Prompt the user to enter their selection of scale
@@ -379,35 +386,47 @@ namespace PROG6221_POE
                     // Read the user input from the console, convert it to lowercase, and trim it to 2 characters
                     userInput = Console.ReadLine().ToLower();
 
-                    recipeScale = errorControl.CheckSetScale(userInput);
-                } while (recipeScale == 0);
+                    recipeScale = errorControl.CheckSetScale(userInput); // Check if the input is valid and set the recipe scale
+                } while (recipeScale == 0); // Continue the loop if the recipe scale is not set
 
                 PrintTitle();
                 Console.WriteLine("Recipe: " + recipeList[recipeIndex].RecipeName + "\n");
-                Console.WriteLine(recipeList[recipeIndex].DisplayRecipe(recipeScale));
+                Console.WriteLine(recipeList[recipeIndex].DisplayRecipe(recipeScale)); // Display the recipe with the selected scale
 
+                // Prompt the user for the next action
                 Console.WriteLine("\nWould You Like To:" +
                       "\n1) Reset Scale" +
                       "\n2) Return To Menu" +
                       "\n");
                 Console.Write("Enter Your Numeric Selection: ");
-                userInput = Console.ReadLine();
-            } while (errorControl.CheckSetScaleMenuChoice(userInput));
+                userInput = Console.ReadLine(); // Read user's input from the console
+            } while (errorControl.CheckSetScaleMenuChoice(userInput)); // Continue the loop based on the user's selection
         }
 
+
         //----------------------------------------------------------------------------\\
+        /* This method prompts the user to enter the singular and plural forms of a 
+         * custom unit of measurement and returns them as a concatenated string. */
         public string SetCustomScale()
         {
+            // Declare a string variable to hold the unit of measurement.
             string unitOfMeasurement;
+            // Print the title of the application.
             PrintTitle();
-            Console.Write("Please Enter The Singluar Form Of Your Unit Of Measurement: ");
+
+            // Prompt the user to enter the singular form of the unit of measurement and read the input.
+            Console.Write("Please Enter The Singular Form Of Your Unit Of Measurement: ");
             unitOfMeasurement = Console.ReadLine();
 
+            // Prompt the user to enter the plural form of the unit of measurement and append it to the singular form.
             Console.Write("Please Enter The Plural Form Of Your Unit Of Measurement: ");
             unitOfMeasurement += "/" + Console.ReadLine();
 
+            // Return the custom unit of measurement.
             return unitOfMeasurement;
+
         }
+        //----------------------------------------------------------------------------\\
     }
 }
 //----------------------------------------------------------------------------\\
