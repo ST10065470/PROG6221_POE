@@ -240,6 +240,7 @@ namespace PROG6221_POE
             // Loop through the ingredients and prompt the user to enter their name, unit of measurement and quantity
             for (int ingredient = 0; ingredient < numIngredients; ingredient++)
             {
+                // Do this whule the user input is null
                 do
                 {
                     PrintTitle();
@@ -261,6 +262,7 @@ namespace PROG6221_POE
                                   "\n6) Custom Unit" +
                                   "\n");
 
+                // Do this while the user input does not fall within the range 1 - 6
                 do
                 {
                     Console.Write("Enter Your Selection: ");
@@ -270,6 +272,7 @@ namespace PROG6221_POE
 
                 } while (ingredientUnitOfMeasurement.Equals("Invalid"));
 
+                //If the user chose option 6 above
                 if (ingredientUnitOfMeasurement == "Custom Unit")
                 {
                     ingredientUnitOfMeasurement = SetCustomScale();
@@ -277,6 +280,7 @@ namespace PROG6221_POE
 
                 Console.WriteLine();
 
+                //Do this while the user input is not a valid number. ie. < 0
                 do
                 {
                     Console.Write("Please Enter The Quantity For \""
@@ -284,6 +288,7 @@ namespace PROG6221_POE
                     userInput = Console.ReadLine();
                 } while (errorControl.CheckForPositiveNumber(userInput) == false);
 
+                //Converting the stirng to a double after error checking to ensure that it is a numeric value
                 ingredientQuantity = double.Parse(userInput);
 
                 newRecipe.addIngredient(ingredientName, ingredientUnitOfMeasurement,

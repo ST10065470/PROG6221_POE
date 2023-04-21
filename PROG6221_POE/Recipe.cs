@@ -151,36 +151,46 @@ namespace PROG6221_POE
             }
         }
 
-        public string IfCustomScale(string unitOfMeasurement, string correctQuantityAndMeasurement,
-                                    double scaleCorrectedQuantity)
+        public string IfCustomScale(string unitOfMeasurement, string correctQuantityAndMeasurement, double scaleCorrectedQuantity)
         {
+            // Split the unit of measurement string into two parts separated by '/'
             string[] parts = unitOfMeasurement.Split('/');
 
+            // Construct a string with the scaled quantity and the appropriate unit of measurement based on the parts array
             correctQuantityAndMeasurement = scaleCorrectedQuantity + " "
                 + (scaleCorrectedQuantity == 1 ? parts[0] : parts[1]) + " Of";
 
+            // Return the constructed string
             return correctQuantityAndMeasurement;
         }
 
         public string IfTeaspoons(double scaleCorrectedQuantity)
         {
+            // If the quantity is a multiple of 4, convert to tablespoons and possibly cups
             if (scaleCorrectedQuantity % 4 == 0)
             {
+                // Divide the quantity by 4 to convert to tablespoons
                 scaleCorrectedQuantity /= 4.0;
+
+                // Call the IfTableSpoons function to get the converted quantity and measurement
                 string correctQuantityAndMeasurement = IfTableSpoons(scaleCorrectedQuantity);
 
+                // If the converted quantity is greater than or equal to 16, convert to cups
                 if (scaleCorrectedQuantity >= 16)
                 {
+                    // Divide the quantity by 16 to convert to cups and call the IfCups function
                     scaleCorrectedQuantity /= 16;
                     return IfCups(scaleCorrectedQuantity);
                 }
                 else
                 {
+                    // Return the converted quantity and measurement
                     return correctQuantityAndMeasurement;
                 }
             }
             else
             {
+                // If the quantity is not a multiple of 4, return the quantity and teaspoon(s) as the unit of measurement
                 string unitOfMeasurement = (scaleCorrectedQuantity > 1) ? "Teaspoons" : "Teaspoon";
                 string correctQuantityAndMeasurement = scaleCorrectedQuantity + " " + unitOfMeasurement + " Of";
                 return correctQuantityAndMeasurement;
@@ -189,19 +199,22 @@ namespace PROG6221_POE
 
         public string IfTableSpoons(double scaleCorrectedQuantity)
         {
+            // If the quantity is greater than or equal to 16, convert to cups
             if (scaleCorrectedQuantity >= 16)
             {
+                // Divide the quantity by 16 to convert to cups and call the IfCups function
                 scaleCorrectedQuantity /= 16;
-
                 return IfCups(scaleCorrectedQuantity);
             }
             else if (scaleCorrectedQuantity < 1)
             {
+                // If the quantity is less than 1, convert to teaspoons
                 scaleCorrectedQuantity *= 4;
                 return IfTeaspoons(scaleCorrectedQuantity);
             }
             else
             {
+                // Otherwise, return the quantity and tablespoon(s) as the unit of measurement
                 string unitOfMeasurement = (scaleCorrectedQuantity > 1) ? "Tablespoons" : "Tablespoon";
                 string correctQuantityAndMeasurement = scaleCorrectedQuantity + " " + unitOfMeasurement + " Of";
                 return correctQuantityAndMeasurement;
@@ -210,6 +223,7 @@ namespace PROG6221_POE
 
         public string IfCups(double scaleCorrectedQuantity)
         {
+            // Return the quantity and cup(s) as the unit of measurement
             string unitOfMeasurement = (scaleCorrectedQuantity > 1) ? "Cups" : "Cup";
             string correctQuantityAndMeasurement = scaleCorrectedQuantity + " " + unitOfMeasurement + " Of";
             return correctQuantityAndMeasurement;
