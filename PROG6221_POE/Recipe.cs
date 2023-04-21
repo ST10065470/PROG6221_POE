@@ -9,10 +9,21 @@ using static System.Console;
 
 namespace PROG6221_POE
 {
-    class Recipe
+    public class Recipe
     {
+        //declare attributes:
+        private string Name;
+        private int NumberSteps;
+        private string[] Steps;
+        private Ingredient[] Ingredients;
 
-        
+
+        protected Recipe()
+        {
+
+
+
+        }//end constructor method
 
     }
 }
