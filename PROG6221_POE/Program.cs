@@ -141,7 +141,6 @@ namespace PROG6221_POE
             } while (checkedUserInput == 0);
         }
 
-
         //----------------------------------------------------------------------------\\
         /*This method takes the user through the process of creating a new 
          * recipe, choosing its' unit of measurement and deleting any already existing recipes */
@@ -401,7 +400,6 @@ namespace PROG6221_POE
                 userInput = Console.ReadLine(); // Read user's input from the console
             } while (errorControl.CheckSetScaleMenuChoice(userInput)); // Continue the loop based on the user's selection
         }
-
 
         //----------------------------------------------------------------------------\\
         /* This method prompts the user to enter the singular and plural forms of a 

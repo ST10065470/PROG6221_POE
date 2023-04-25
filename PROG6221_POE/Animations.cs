@@ -32,8 +32,7 @@ namespace PROG6221_POE
                 Console.ResetColor(); // reset the console text color to the default
             }
         }
-
-
+        //----------------------------------------------------------------------------\\
         //A method which prints a loadign animation when called
         public void loadingAnimation(ConsoleColor colour)
         {
@@ -47,6 +46,7 @@ namespace PROG6221_POE
             }
             Thread.Sleep(400);
         }
+        //----------------------------------------------------------------------------\\
     }
 }
-
+//----------------------------------------------------------------------------\\

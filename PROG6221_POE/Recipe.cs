@@ -30,7 +30,7 @@ namespace PROG6221_POE
 
 
         //----------------------------------------------------------------------------\\
-
+        //This method adds an ingredient object to an array of ingredients
         public void addIngredient(string ingredientName, string unitOfMeasurement,
                                   double ingredientQuantity)
         {
@@ -152,7 +152,8 @@ namespace PROG6221_POE
                 }
             }
         }
-
+        //----------------------------------------------------------------------------\\
+        //This method will adjust the amounts and related scales if the scale set by the user was custom
         public string IfCustomScale(string unitOfMeasurement, string correctQuantityAndMeasurement,
                                     double scaleCorrectedQuantity)
         {
@@ -167,7 +168,8 @@ namespace PROG6221_POE
             // Return the constructed string
             return correctQuantityAndMeasurement;
         }
-
+        //----------------------------------------------------------------------------\\
+        //This method will adjust the amounts and related scales if the scale set by the user was Teaspoons
         public string IfTeaspoons(double scaleCorrectedQuantity)
         {
             // If the quantity is a multiple of 4, convert to tablespoons and possibly cups
@@ -202,7 +204,8 @@ namespace PROG6221_POE
                 return correctQuantityAndMeasurement;
             }
         }
-
+        //----------------------------------------------------------------------------\\
+        //This method will adjust the amounts and related scales if the scale set by the user was Tablespoons
         public string IfTableSpoons(double scaleCorrectedQuantity)
         {
             // If the quantity is greater than or equal to 16, convert to cups
@@ -226,7 +229,8 @@ namespace PROG6221_POE
                 return correctQuantityAndMeasurement;
             }
         }
-
+        //----------------------------------------------------------------------------\\
+        //This method will adjust the amounts and related scales if the scale set by the user was cups
         public string IfCups(double scaleCorrectedQuantity)
         {
             // Return the quantity and cup(s) as the unit of measurement
@@ -234,7 +238,8 @@ namespace PROG6221_POE
             string correctQuantityAndMeasurement = scaleCorrectedQuantity + " " + unitOfMeasurement + " Of";
             return correctQuantityAndMeasurement;
         }
-
+        //----------------------------------------------------------------------------\\
+        //This method will adjust the amounts and related scales if the scale set by the user was kilograms
         public string IfKilograms(double scaleCorrectedQuantity)
         {
             if (scaleCorrectedQuantity < 1)
@@ -249,7 +254,8 @@ namespace PROG6221_POE
                 return correctQuantityAndMeasurement;
             }
         }
-
+        //----------------------------------------------------------------------------\\
+        //This method will adjust the amounts and related scales if the scale set by the user was grams
         public string IfGrams(double scaleCorrectedQuantity)
         {
             if (scaleCorrectedQuantity >= 1000)
