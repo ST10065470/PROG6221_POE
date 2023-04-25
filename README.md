@@ -1,7 +1,7 @@
 # PROG6221_POE
 # Recipe Book Programme
 
-This programme is a console application that allows users to create, display, scale and delete recipes using C# programming. The programme also includes animations and error handling features.
+This programme is a console application that allows users to create, display, scale and delete recipes using C# programming. The programme also includes animations and error handling features. Furthermore the application allows the user to enter words or numbers, when quantities are concerned and they will be handled accordingly so that output is the same.
 
 ## Getting Started
 
