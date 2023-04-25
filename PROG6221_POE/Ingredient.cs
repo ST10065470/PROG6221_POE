@@ -14,37 +14,25 @@ namespace PROG6221_POE
         //declare attributes
         private string name;
         private double quantity;
-        private int unitOfMeasure;
+        private string unitOfMeasure;
 
         //declare GLOBAL variables:
         private enum Units { Teaspoon, Tablespoon, Cup, Pint, Quart, Gallon };
 
-        protected Ingredient()
+        public Ingredient(string name, string unitOfMeasure, double quantity)
         {
 
-
+            this.name = name;
+            this.unitOfMeasure = unitOfMeasure;
+            this.quantity = quantity;
 
         }//end contructor method
 
 
         //Getters and Setters:
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }//end name getter-setter
-
-        public double Quantity
-        {
-            get { return quantity; }
-            set { quantity = value; }
-        }//end quanitity getter-setter
-
-        public int UnitOfMeasure
-        {
-            get { return unitOfMeasure; }
-            set { unitOfMeasure = value; }
-        }//end unitOfMeasure getter-setter
+        public string Name { get => Name; set => Name = value; }
+        public double Quantity { get => quantity; set => quantity = value; }
+        public string UnitOfMeasure { get => unitOfMeasure; set => unitOfMeasure = value; }
 
     }
 }

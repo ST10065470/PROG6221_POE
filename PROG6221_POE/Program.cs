@@ -16,7 +16,8 @@ namespace PROG6221_POE
         {
 
             //launch program from interfacing class
-            Interfacing.run();
+            Interfacing interfacer = new Interfacing();
+            interfacer.run();
 
         }//end main method
     }
