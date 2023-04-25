@@ -1,17 +1,12 @@
 ﻿using System;
 using static System.Formats.Asn1.AsnWriter;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PROG6221_POE
 {
     public class ErrorControl
     {
-        public ErrorControl()
-        {
-        }
-
-        /*
-        Displays an error message prompting the user to try again after entering invalid input.
-        */
+        //Displays an error message to the user prompting them to try again after entering invalid input.
         public void IncorrectEntryPrompt()
         {
             // Set text text colour to red
@@ -28,14 +23,16 @@ namespace PROG6221_POE
             // Reset the console text colour to default
             Console.ResetColor();
         }
-
-        public static void ClearCurrentConsoleLine()
+        //----------------------------------------------------------------------------\\
+        //Clears the current console line by printing blank spaces over the existing text.
+        public void ClearCurrentConsoleLine()
         {
             Console.SetCursorPosition(0, Console.CursorTop - 1); //Setting the cursor position to the begining of the current line
             Console.Write(new string(' ', Console.WindowWidth + 100));//Printing blank spaces for the length of the console + 100 characters over the existing text
             Console.SetCursorPosition(0, Console.CursorTop - 1); //Setting the cursor position to the begining of the current line
         }
-
+        //----------------------------------------------------------------------------\\
+        //Prints a loading animation consisting of three dots, with a specified color.
         //A method which prints a loadign animation when called
         public void LoadingAnimation(ConsoleColor colour)
         {
@@ -49,8 +46,9 @@ namespace PROG6221_POE
             }
             Thread.Sleep(400);
         }
-
-        // Check if the user's answer contains "y" or "n"
+        //----------------------------------------------------------------------------\\
+        // Checks if the user's answer contains "y" or "n" and returns 1 if "y", 2 if "n",
+        // or 0 if neither. If it is neither, it calls the IncorrectEntryPrompt() method.
         public int CheckYesOrNo(string answer)
         {
             if (answer.ToLower().Contains("y")) // if answer contains "y"
@@ -67,9 +65,10 @@ namespace PROG6221_POE
                 return 0; // return 0
             }
         }
-
-        // Check if the user's input is empty
-        public Boolean CheckForNull(string userInput)
+        //----------------------------------------------------------------------------\\
+        // Checks if the user's input is null and returns false if it is,
+        // or true if it is not. If it is null, it calls the IncorrectEntryPrompt() method.
+        public bool CheckForNull(string userInput)
         {
             if (userInput.Equals("")) // if user input is empty
             {
@@ -81,31 +80,46 @@ namespace PROG6221_POE
                 return true; // return true
             }
         }
-
-        // Check if the user's input is a number
-        public Boolean CheckForPositiveNumber(string userInput)
+        //----------------------------------------------------------------------------\\
+        /* 
+         * Check if the user's input Checks if the user's input is a positive number
+         * and returns the input as a double if it is. If the input is less than 0 or
+         * cannot be parsed as a double, it tries to convert it to a double using the
+         * WordToDouble method and returns -1 to indicate failure. a positive number
+        */
+        public double CheckForPositiveNumber(string userInput)
         {
             try
             {
-                if (double.Parse(userInput) >= 0) // try to parse user input as a double and check if the number is greater than 0
+                // try to parse user input as a double and check if the number is greater than or equal to 0
+                double input = double.Parse(userInput);
+                if (input >= 0)
                 {
-                    return true; // return true if successful
+                    return input; // return the input if successful
                 }
                 else
                 {
-                    IncorrectEntryPrompt(); // call IncorrectEntryPrompt method
-                    return false; // return false
+                    throw new Exception(); // throw an exception if the input is less than 0
                 }
-                
             }
-            catch (Exception ex) // catch any exception
+            catch
             {
-                IncorrectEntryPrompt(); // call IncorrectEntryPrompt method
-                return false; // return false
+                // if parsing as a double fails, try to convert the input to a double using the WordToDouble method
+                double wordValue = WordToDouble(userInput);
+                if (wordValue >= 0)
+                {
+                    return wordValue; // return the word value if successful
+                }
+                else
+                {
+                    return -1; // return -1 to indicate failure
+                }
             }
         }
-
-        // This method checks if the user's input is a valid unit of measurement
+        //----------------------------------------------------------------------------\\
+        // Checks if the user's input is a valid unit of measurement and returns the
+        // corresponding unit of measurement as a string. If the input is not valid,
+        // it returns an empty string.
         public string CheckSelectUnit(string userInput)
         {
             switch (userInput)
@@ -151,41 +165,10 @@ namespace PROG6221_POE
                     IncorrectEntryPrompt();
                     return "Invalid";
             }
-
-
-            switch (userInput)
-            {
-                // if user input is "1", "teaspoon", or "teaspoon(s)"
-                case "1":
-                case "teaspoon":
-                case "teaspoon(s)":
-                    return "Teaspoon(s)"; // return "Teaspoon(s)"
-                //if user input is "2", "tablespoon", or "tablespoon(s)"
-                case "2":
-                case "tablespoon":
-                case "tablespoon(s)":
-                    return "Tablespoon(s)"; // return "Tablespoon(s)"
-                // if user input is "3", "cup", or "cup(s)"
-                case "3":
-                case "cup":
-                case "cup(s)":
-                    return "Cup(s)"; // return "Cup(s)"
-                // else if user input is "4", "gram", or "gram(s)"
-                case "4":
-                case "gram":
-                case "gram(s)":
-                    return "Gram(s)"; // return "Gram(s)"
-                //if if user input is "5", "kilogram", or "kilogram(s)"
-                case "5":
-                case "kilogram":
-                case "kilograms":
-                    return "Kilogram(s)"; // return "Kilogram(s)"
-                default:
-                    IncorrectEntryPrompt(); // call IncorrectEntryPrompt method
-                    return "Invalid"; // return "Invalid"
-            }
         }
-
+        //----------------------------------------------------------------------------\\
+        //The code takes a string input and returns a double value based on the input
+        //matching specific cases or a default value of 0 if none of the cases match.
         public double CheckSetScale(string userInput)
         {
             switch (userInput) 
@@ -214,8 +197,13 @@ namespace PROG6221_POE
                     return 0;
             }
         }
-
-        public Boolean CheckSetScaleMenuChoice(string userInput)
+        //----------------------------------------------------------------------------\\
+        /* This function checks if the user input is either "1) reset scale" or "2) Return To Menu",
+         * returning true or false respectively, and prompts the user for incorrect input, <summary>
+         * This function checks if the user input is either "1) reset scale" or "2) Return To Menu",
+         * always returning true as a default value.
+        */
+        public bool CheckSetScaleMenuChoice(string userInput)
         {
             // Check if the user input is '1) reset scale'
             if ("1) reset scale".Contains(userInput))
@@ -235,8 +223,10 @@ namespace PROG6221_POE
                 return true;
             }
         }
-
-        public Boolean CheckForRecipe(string recipeNum, int numRecipes)
+        //----------------------------------------------------------------------------\\
+        //This function parses an input recipe number, checks if it is less than or equal
+        //to the number of available recipes, and returns a boolean value accordingly.
+        public bool CheckForRecipe(string recipeNum, int numRecipes)
         {
             // Parse the recipe number as an integer
             int recipeIndex = int.Parse(recipeNum);
@@ -255,5 +245,80 @@ namespace PROG6221_POE
             }
         }
 
+        //Title: C# method to convert a word to a number (double)
+        //Author: ChatGPT
+        //Date: 2023-04-25
+
+        // Source: https://github.com/openai/gpt-3-examples/blob/main/csharp/word-to-double-converter.cs
+        //Availability: https://github.com/ChatGPT/Code-Samples/blob/main/CSharp/WordToDouble.cs
+
+        // OpenAI is a research organization that aims to ensure that artificial intelligence (AI) benefits humanity. 
+        // They are known for their work in developing natural language processing (NLP) and AI models, including GPT-3. 
+        // For more information, visit their website at https://openai.com/.
+
+        // Russell Schwedhelm is the author of this adapted code. This version includes modifications to fit specific use cases.
+
+        //This method converts an enetered word to a double
+        double WordToDouble(string userInput)
+        {
+            // Define a dictionary of number words and their corresponding numeric values
+            Dictionary<string, double> numberWords = new Dictionary<string, double>()
+            {
+                {"zero", 0}, {"one", 1}, {"two", 2}, {"three", 3}, {"four", 4}, {"five", 5}, {"six", 6},
+                {"seven", 7}, {"eight", 8}, {"nine", 9}, {"ten", 10}, {"eleven", 11}, {"twelve", 12},
+                {"thirteen", 13}, {"fourteen", 14}, {"fifteen", 15}, {"sixteen", 16}, {"seventeen", 17},
+                {"eighteen", 18}, {"nineteen", 19}, {"twenty", 20}, {"thirty", 30}, {"forty", 40}, {"fifty", 50},
+                {"sixty", 60}, {"seventy", 70}, {"eighty", 80}, {"ninety", 90}, {"hundred", 100}, {"thousand", 1000},
+                {"million", 1000000}, {"billion", 1000000000},
+            };
+
+            double totalValue = 0;
+            double chunkValue = 0;
+            bool hasHundred = false;
+
+            string[] words = userInput.Split(' ', '-');
+            foreach (string w in words)
+            {
+                if (numberWords.TryGetValue(w, out double value))
+                {
+                    if (value >= 100)
+                    {
+                        if (hasHundred)
+                        {
+                            // Invalid Input Prompt
+                            IncorrectEntryPrompt();
+                            return 0;
+                        }
+                        chunkValue *= value;
+                        hasHundred = true;
+                    }
+                    else
+                    {
+                        chunkValue += value;
+                    }
+                }
+                else if (w.Equals("and"))
+                {
+                    // do nothing
+                }
+                else
+                {
+                    // Invalid Input Prompt
+                    IncorrectEntryPrompt();
+                    return -1;
+                }
+            }
+
+            if (chunkValue == 0 && hasHundred)
+            {
+                chunkValue = 100;
+            }
+
+            totalValue += chunkValue;
+
+            return totalValue;
+        }
+        //----------------------------------------------------------------------------\\
     }
 }
+//----------------------------------------------------------------------------\\

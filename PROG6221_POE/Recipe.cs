@@ -125,21 +125,23 @@ namespace PROG6221_POE
             string correctQuantityAndMeasurement = scaleCorrectedQuantity + " "
                 + unitOfMeasurement; //A string which stores the quantity and unit of measurement
 
+            /*If the unit of measurement contains a '/' it means it is a custom unit as the '/'
+            seperates the pular and singular forms */
             if (unitOfMeasurement.Contains('/'))
             {
                 return IfCustomScale(unitOfMeasurement, correctQuantityAndMeasurement, scaleCorrectedQuantity);
             }
 
-            // If originally entered measurements was teaspoons:
             else
             {
+                //This statemetn calls the appropriate method based on the unit of measurement selected by the user
                 switch (unitOfMeasurement)
                 {
                     case "Teaspoon(s)":
                         return IfTeaspoons(scaleCorrectedQuantity);
                     case "Tablespoon(s)":
                         return IfTableSpoons(scaleCorrectedQuantity);
-                    case "Cups":
+                    case "Cup(s)":
                         return IfCups(scaleCorrectedQuantity);
                     case "Kilograms(s)":
                         return IfKilograms(scaleCorrectedQuantity);
@@ -151,12 +153,14 @@ namespace PROG6221_POE
             }
         }
 
-        public string IfCustomScale(string unitOfMeasurement, string correctQuantityAndMeasurement, double scaleCorrectedQuantity)
+        public string IfCustomScale(string unitOfMeasurement, string correctQuantityAndMeasurement,
+                                    double scaleCorrectedQuantity)
         {
             // Split the unit of measurement string into two parts separated by '/'
             string[] parts = unitOfMeasurement.Split('/');
 
-            // Construct a string with the scaled quantity and the appropriate unit of measurement based on the parts array
+            // Construct a string with the scaled quantity and the appropriate
+            // unit of measurement based on the parts array
             correctQuantityAndMeasurement = scaleCorrectedQuantity + " "
                 + (scaleCorrectedQuantity == 1 ? parts[0] : parts[1]) + " Of";
 
@@ -190,9 +194,11 @@ namespace PROG6221_POE
             }
             else
             {
-                // If the quantity is not a multiple of 4, return the quantity and teaspoon(s) as the unit of measurement
+                // If the quantity is not a multiple of 4, return the quantity
+                // and teaspoon(s) as the unit of measurement
                 string unitOfMeasurement = (scaleCorrectedQuantity > 1) ? "Teaspoons" : "Teaspoon";
-                string correctQuantityAndMeasurement = scaleCorrectedQuantity + " " + unitOfMeasurement + " Of";
+                string correctQuantityAndMeasurement = scaleCorrectedQuantity
+                       + " " + unitOfMeasurement + " Of";
                 return correctQuantityAndMeasurement;
             }
         }

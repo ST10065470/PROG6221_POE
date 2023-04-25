@@ -150,8 +150,8 @@ namespace PROG6221_POE
             //Declaring variables
             string userInput; //Used to take user input from the console
             string recipeName; //Used to store the user inputted recipe name
-            int numIngredients; //Used to store the user inputted number of ingredients
-            int numSteps; //Used to store the user inputted number of steps
+            int numIngredients = -1; //Used to store the user inputted number of ingredients
+            int numSteps = -1; //Used to store the user inputted number of steps
             int checkedUserInput; //Used to store result of a error control check
 
             // Check if there is already a recipe in the storage
@@ -199,11 +199,11 @@ namespace PROG6221_POE
                 Console.WriteLine("Recipe: " + recipeName);
                 Console.WriteLine();
                 Console.Write("How Many Ingredients Do You Want To Add: ");
-                userInput = Console.ReadLine();
-            } while (errorControl.CheckForPositiveNumber(userInput) == false);
+                userInput = Console.ReadLine().ToLower();
 
-            // Convert the user input to an integer
-            numIngredients = int.Parse(userInput);
+                // Convert the user input to an integer
+                numIngredients = (int)errorControl.CheckForPositiveNumber(userInput);
+            } while (numIngredients == -1);
 
             // If the number of ingredients is 0, print an error message and abort creating the recipe
             if (numIngredients == 0)
@@ -219,11 +219,11 @@ namespace PROG6221_POE
                 Console.WriteLine("Recipe: " + recipeName);
                 Console.WriteLine();
                 Console.Write("How Many Steps Do You Want To Add: ");
-                userInput = Console.ReadLine();
-            } while (errorControl.CheckForPositiveNumber(userInput) == false);
+                userInput = Console.ReadLine().ToLower();
 
-            // Convert the user input to an integer
-            numSteps = int.Parse(userInput);
+                // Convert the user input to an integer
+                numSteps = (int)errorControl.CheckForPositiveNumber(userInput);
+            } while (numSteps == -1);
 
             // If the number of steps is 0, print an error message and abort creating the recipe
             if (numSteps == 0)
@@ -237,7 +237,7 @@ namespace PROG6221_POE
 
             // Declare and initialize the variables for the ingredients
             string ingredientName;
-            double ingredientQuantity = 0;
+            double ingredientQuantity = -1;
             string ingredientUnitOfMeasurement = "";
 
             // Loop through the ingredients and prompt the user to enter their name, unit of measurement and quantity
@@ -287,12 +287,12 @@ namespace PROG6221_POE
                 do
                 {
                     Console.Write("Please Enter The Quantity For \""
-                                  + ingredientName + "\" (x.xx): ");
-                    userInput = Console.ReadLine();
-                } while (errorControl.CheckForPositiveNumber(userInput) == false);
+                                  + ingredientName + "\": ");
+                    userInput = Console.ReadLine().ToLower();
 
-                //Converting the stirng to a double after error checking to ensure that it is a numeric value
-                ingredientQuantity = double.Parse(userInput);
+                    //Converting the stirng to a double after error checking to ensure that it is a numeric value >= 0
+                    ingredientQuantity = errorControl.CheckForPositiveNumber(userInput);
+                } while (ingredientQuantity == -1);
 
                 newRecipe.addIngredient(ingredientName, ingredientUnitOfMeasurement,
                                         ingredientQuantity);
@@ -360,11 +360,10 @@ namespace PROG6221_POE
             do
             {
                 Console.Write("Enter Your Numeric Selection: ");
-                userInput = Console.ReadLine(); // Read user's input from the console
-            } while (errorControl.CheckForPositiveNumber(userInput) == false
-                     || errorControl.CheckForRecipe(userInput, recipeList.Count) == false); // Check if the input is valid
+                userInput = Console.ReadLine().ToLower(); // Read user's input from the console
 
-            recipeIndex = int.Parse(userInput) - 1; // Convert user's input to integer and set it as the recipe index
+                recipeIndex = (int)errorControl.CheckForPositiveNumber(userInput) - 1; // Convert user's input to integer and set it as the recipe index
+            } while (recipeIndex == -2 || errorControl.CheckForRecipe(userInput, recipeList.Count) == false); // Check if the input is valid
 
             // Loop for setting the scale of the selected recipe
             do
@@ -411,12 +410,12 @@ namespace PROG6221_POE
         {
             // Declare a string variable to hold the unit of measurement.
             string unitOfMeasurement;
-            // Print the title of the application.
-            PrintTitle();
 
             // Prompt the user to enter the singular form of the unit of measurement and read the input.
-            Console.Write("Please Enter The Singular Form Of Your Unit Of Measurement: ");
+            Console.Write("\nPlease Enter The Singular Form Of Your Unit Of Measurement: ");
             unitOfMeasurement = Console.ReadLine();
+
+            Console.WriteLine();
 
             // Prompt the user to enter the plural form of the unit of measurement and append it to the singular form.
             Console.Write("Please Enter The Plural Form Of Your Unit Of Measurement: ");
@@ -430,4 +429,3 @@ namespace PROG6221_POE
     }
 }
 //----------------------------------------------------------------------------\\
-
