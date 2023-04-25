@@ -39,6 +39,10 @@ If the user selects 3) from the main menu the prompts that will follow will guid
 ## Exiting The Programme
 If the user selects 4) from the main menu the programme will terminate.
 
+## References
+### Methods
+WordToDouble - ChatGPT. (2023, April 25). C# method to convert a word to a number (double) [Source code]. https://github.com/ChatGPT/Code-Samples/blob/main/CSharp/WordToDouble.cs
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
